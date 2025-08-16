@@ -1,0 +1,567 @@
+<html lang="en">
+<head>
+   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Noms Aléatoires</title>
+    
+    <!-- Ajoutez le lien CDN Bootstrap pour Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Ajoutez une balise link pour le favicon -->
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
+    <style>
+      body {
+            background-color: #f8f9fa; /* Couleur de fond */
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        #nomAleatoire {
+            font-size: 24px;
+            color: #226ebe; /* Couleur du texte */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #nomAleatoire2 {
+            font-size: 24px;
+            color: #32b312; /* Couleur du texte */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #clicsInfo {
+            font-size: 18px;
+            color: #000000; /* Couleur du texte */
+            margin-top: 20px;
+        }
+
+        .logo {
+            /* Ajoutez les styles spécifiques pour le mode nuit */
+            max-width: 300px;
+            height: left;
+            margin-bottom: 15px;
+        }
+
+        .logo-nuit {
+            /* Ajoutez les styles spécifiques pour le mode nuit */
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 150px;
+        }
+
+        .btn-generer {
+            background-color: #28a745; /* Couleur de fond du bouton */
+            color: #fff; /* Couleur du texte du bouton */
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-right: 10px;
+        }
+
+        .btn-rechercher {
+            background-color: #007bff; /* Couleur de fond du bouton de recherche */
+            color: #fff; /* Couleur du texte du bouton de recherche */
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+        .input-modification {
+            margin-top: 10px;
+        }
+
+        .btn-modifier {
+            background-color: #007bff; /* Couleur de fond du bouton de modification */
+            color: #fff; /* Couleur du texte du bouton de modification */
+            font-size: 16px;
+            font-weight: bold;
+            padding: 5px 10px;
+            margin-top: 10px;
+        }
+
+        /* Style pour déplacer la fenêtre modale vers le bas */
+        .modal {
+            transform: translate(0, 50%);
+        }
+
+        .mode-nuit {
+            background-color: #343a40; /* Couleur de fond pour le mode nuit */
+            color: #fff; /* Couleur du texte pour le mode nuit */
+        }
+         /* Votre style de bouton */
+         .beautiful-button {
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(to bottom, #1b1c3f, #4a4e91);
+            color: white;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 28px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: button-shimmer 2s infinite;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .beautiful-button:hover {
+            background: linear-gradient(to bottom, #2c2f63, #5b67b7);
+            animation: button-particles 1s ease-in-out infinite;
+            transform: translateY(-2px);
+        }
+
+        .beautiful-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes button-shimmer {
+            0% {
+                background-position: left top;
+            }
+
+            100% {
+                background-position: right bottom;
+            }
+        }
+
+        @keyframes button-particles {
+            0% {
+                background-position: left top;
+            }
+
+            100% {
+                background-position: right bottom;
+            }
+        }  
+        .toggle-switch {
+  position: relative;
+  width: 100px;
+  height: 50px;
+  --light: #d8dbe0;
+  --dark: #28292c;
+  --link: rgb(27, 129, 112);
+  --link-hover: rgb(24, 94, 82);
+}
+
+.switch-label {
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  background-color: var(--dark);
+  border-radius: 25px;
+  cursor: pointer;
+  border: 3px solid var(--dark);
+}
+
+.checkbox {
+  position: absolute;
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider {
+  background-color: var(--light);
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  -webkit-box-shadow: inset 12px -4px 0px 0px var(--light);
+  box-shadow: inset 12px -4px 0px 0px var(--light);
+  background-color: var(--dark);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider::before {
+  -webkit-transform: translateX(50px);
+  -ms-transform: translateX(50px);
+  transform: translateX(50px);
+  background-color: var(--dark);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.button-active:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.searchInput {
+  border: none;
+  background: none;
+  outline: none;
+  color: rgb(0, 0, 0);
+  font-size: 15px;
+  padding: 10px; /* Ajustez la valeur de la marge intérieure selon vos besoins */
+}
+
+.btn-rechercher {
+  /* Ajoutez vos styles pour le bouton ici */
+  background-color: #2AF598;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px; /* Ajustez la valeur du rembourrage selon vos besoins */
+  transition: background-color 0.3s ease;
+}
+
+.btn-rechercher:hover {
+  background-color: #009EFD;
+}
+
+/* Ajoutez le style pour le carrousel ici */
+.brand-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-item {
+    display: none;
+}
+
+.brand-item.active {
+    display: block;
+}
+
+.customNavigation {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.btn {
+    cursor: pointer;
+    font-size: 20px;
+    color: #000;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+.btn {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn.next {
+        margin-left: 10px;
+    }
+
+    .btn.prev:before {
+        content: '\003C'; /* Code pour le symbole < */
+        margin-right: 5px;
+    }
+
+    .btn.next:after {
+        content: '\003E'; /* Code pour le symbole > */
+        margin-left: 5px;
+    }
+    .btn.prev {
+    position: absolute;
+    left: 10px; /* ou la valeur de marge à gauche que vous préférez */
+    top: 50%;
+    transform: translateY(-50%);
+    /* Ajoutez d'autres styles nécessaires */
+}
+
+.btn.next {
+    position: absolute;
+    right: 10px; /* ou la valeur de marge à droite que vous préférez */
+    top: 50%;
+    transform: translateY(-50%);
+    /* Ajoutez d'autres styles nécessaires */
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <section id="content">
+            <div class="brand-carousel">
+               <a class="btn prev brand_prev"></a>   <!-- Bouton précédent &lt;  -->
+                <div class="brand-item active">
+                    <img src="image/logo2.png" alt="Image 1" />
+                </div>
+                <div class="brand-item">
+                    <img src="image/enghlis6.png" alt="Image 2" />
+                    
+                </div>
+                <div class="brand-item">
+                    <img src="image/enghlis3.png" alt="Image 3" />
+                </div>
+                <div class="brand-item">
+                    <img src="image/enghlis4.png" alt="Image 4" />
+                </div>
+                <div class="brand-item">
+                    <img src="image/enghlis5.png" alt="Image 5" />
+                </div>
+                <div class="brand-item">
+                    <img src="image/enghlis2.png" alt="Image 6" />
+                </div>
+                <a class="btn next brand_next"></a>  <!--Bouton suivant  >&gt;--> 
+            </div>
+        </section>
+    
+   
+    <form onsubmit="verifierMot(); return false;">
+        <input type="text" id="inputMot" class="searchInput" placeholder="Entrez un mot">
+        <button type="submit" class="btn-rechercher button-active">Vérifier Existence</button>
+      </form>
+      <p id="messageExistence"></p>
+      
+    <h1 class="mb-4">Générateur de Noms Aléatoires</h1>
+    
+    <!-- Ajoutez un paragraphe pour afficher le nombre de mots de la première liste -->
+    <p id="nombreDeMots"></p>
+    
+    <p id="nomAleatoire" class="mb-3"></p>
+
+    <!-- Ajoutez un bouton stylisé pour générer un nouveau nom de la première liste -->
+    <button class="btn btn-generer beautiful-button" onclick="genererNomAleatoire()">Générer un nouveau nom</button>
+    
+    <!-- Ajoutez un bouton pour la recherche automatique du dernier nom généré de la première liste -->
+    <button class="btn btn-rechercher beautiful-button" onclick="rechercherDansDictionnaireAuto()">Rechercher automatiquement</button>
+    <button class="btn btn-rechercher beautiful-button" onclick="rechercherAuto1()">Rechercher Traduction</button>
+    <!-- Ajoutez un paragraphe pour afficher le nombre de mots de la deuxième liste -->
+    <p id="nombreDeMots2"></p>
+    
+    <p id="nomAleatoire2" class="mb-3"></p>
+
+    <!-- Ajoutez un bouton stylisé pour générer un nouveau nom de la deuxième liste -->
+    <button class="btn btn-generer beautiful-button" onclick="genererNomAleatoire2()">Générer un nouveau nom (Liste Noire)</button>
+    <button class="btn btn-rechercher beautiful-button" onclick="rechercherDansDictionnaireAuto2()">Rechercher automatiquement</button>
+    <button class="btn btn-rechercher beautiful-button" onclick="rechercherAuto()">Rechercher Traduction</button>
+    <div class="toggle-switch">
+        <input type="checkbox" id="modeSwitch" class="checkbox" onclick="basculerMode()">
+        <label class="switch-label" for="modeSwitch">
+          <div class="slider"></div>
+        </label>
+      </div>
+     
+      
+
+    <!-- Ajoutez un paragraphe pour afficher le nombre de clics -->
+    <p id="clicsInfo"></p>
+   
+
+     <h4>
+<p>A1 (introductif) : Correspond à 1-1000 (beginner)</p>
+<p>A2 (intermédiaire) : Correspond à 1000-2000 (pre-intermediate)</p>
+<p>B1 (seuil) : Correspond à 2000-3000 (intermediate)</p>
+<p>B2 (avancé) : Correspond à 3000-4000 (upper-intermediate)</p>
+<p>C1 (autonome) : Correspond à 4000-5000 (advanced) </p>
+<p>C2 (maîtrise) : Représente un niveau de maîtrise complète de la langue, sans correspondance directe avec une plage de mots spécifique </p>
+</h4>
+    <script>
+   document.addEventListener("DOMContentLoaded", function () {
+            const prevButton = document.querySelector('.brand_prev');
+            const nextButton = document.querySelector('.brand_next');
+            const items = document.querySelectorAll('.brand-item');
+
+            let currentIndex = 0;
+            let intervalId;
+
+            showItem(currentIndex);
+
+            function showItem(index) {
+                items.forEach((item, i) => {
+                    item.classList.remove('active');
+                    if (i === index) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+
+            function nextItem() {
+                currentIndex = (currentIndex + 1) % items.length;
+                showItem(currentIndex);
+            }
+
+            function prevItem() {
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+                showItem(currentIndex);
+            }
+
+            function startAutoPlay() {
+                intervalId = setInterval(nextItem, 10000); // Change image every 3 seconds
+            }
+
+            function stopAutoPlay() {
+                clearInterval(intervalId);
+            }
+
+            prevButton.addEventListener('click', function () {
+                prevItem();
+                stopAutoPlay();
+            });
+
+            nextButton.addEventListener('click', function () {
+                nextItem();
+                stopAutoPlay();
+            });
+
+            items.forEach(item => {
+                item.addEventListener('mouseenter', stopAutoPlay);
+                item.addEventListener('mouseleave', startAutoPlay);
+            });
+
+            // Start auto-play initially
+            startAutoPlay();
+        });
+        // Liste de noms
+        var listeDeNoms = ["Prediction", "Desert","Descend","Popular", "Sit", "Sofa", "bed" ,"Recipes","Instead","Absolutely","DownRight","Earn","Husband","Holdings","Salary","Income","Monthly","Annual","Weekly","Also","Hit","Incident","State","Onto","Horn","Hour","Adult","Acquire","Healing",
+    "Flee","Humanity","Picture","Lawyers","Refugees","Young","Room","Called","Some","Flourish","Pick","Brain","Collaboration","About","Soldies","With","Incurring","Suing","Concussions","Collisions","Our","Hurt","Inguries","Try","Rules","Interrupt","Again","Fluent",
+    "Aloud","Spend","Little","Big","Better","Hear","Worse","Able","Without","Sure","Dishes","Mistake","Correct","Tired","Recommend","Rhythm","Practise","Teeth","Beard","Hands","Head","Fangs","Boat","Hunts","Catch","Reason","Foreign","Nose","Fingers","Eyse","Hair","Mouth","Handsome","River","Ears",
+    "Achieve","Phrase","Them","Get","Getting","Sheep","Ram","Audio","Materials","Nature","Reality","Impressions","Such","Such as","Drown","Tie","Louph","Left","Right","Astronomer","Discovers","Quiet","Conference","Butterflies","flowers","Irony","Unfortunately","fortunately","Tree","Land","Ground","Smart",
+    "Clever","Grow","Vegetable","Hungry","Thirsty","Scared","Shocked","Mean","Sneak","Drugs","Conclude","Usual","Frightens","Show","During","Borrow","Knees","Unusual","Garden","Build","Daughter","Typer","Sort","Nearly","Roughly","Wood","Could","Ordinary","Wrong","Dirty","Wooden","Spring","Worm","Busy","Rainy",
+    "Cloudy","Underwear","Deep","Companies","Corporate","Inquisitive","Monolithic","Unprecedented","Precedented","Noise","Expensive","Honest","Turn","Secret","Moustache","Area","Narrow","Early","Thought","Bring","Shing","Bright","Treasures","Wheels","Behind","Civilization","Cereals","Enough","Flag",
+    "Stranger","Museums","Kidding","Boring","Incredible","Doubt","Acquaintances","Neutral","Harsh","Hope","Hopefully","Exciting","Often","Leader","Fun","Finaly","Ultimately","Fabulous","Afford","Carefully","Scream","Shout","Suddenly","Perhaps","Enemies","Revenger","Blood","Betray","Honey","Rodent","Ridiculous",
+    "Horrifying","Ally","Hostage","Anyone","Punishment","Destiny","Overnight","Prove","Collaps","Hide","Reckless","Quit","Assignment","Humble","Lowly","Modesty","Shy","Snatch","Puddings","Bathrooms","Dealt","Eligible","Power","Nappy","Alien","Wizard","Witch","Vampir","Recess","Monster","Ambition","Sailing","Perseverance",
+    "Jump","Cocky","Arrogant","Evil","Wicked","Hell","Wedding","Holy","Virgin","Damages","Lose","Average","Kind","Nice","Sweet","Caring","Moron","Stupid","Nurse","Less","Skinny","Drop","Asshole","Hateful","Uncomfortable","Floor","Maybe","May","Way","Struggle","Well","Delusional","Delusive","Honour","Comfortable","More",
+    "Wickedness","Safe","Powerfull","Care","Take","Neighbours","Sell","Brave","Fascinating","Entertainment","Tears","Unlucky","Lucky","Mouse","Rat","Seems","Appear","Weaknesses","Swallow","Trust","Snooty","Undetectable","Detectable","Panic","Rightful","Appreciate","Foolish","Deserving","Worsening","Barely","Owner","Rooster",
+    "Town","Bird","Shoes","Neither-Nor","Either-or","Curtain","Including","Destroy","Shortest","Chosen","Murder","Kill","Ancestor","Peaceful","Graves","Worries","Bill","Bottle","Disaster","Extinct","Species","Earth","Theory","Expedition","Meteoritc","Giant","Warm","Hesitate","Whisper","Next to","Reckon","Think","Unfuny","Funny",
+    "Fashionably","Naughtiness","Smell","Horrible","Bath","Huge","Keep","Keep going","Unfashionably","Awareness","Naughty","Negligence","Blank","Empty","Behavior","Burglar","Cover","Aware","Bogus","Awake","Lure","Treat","Look","Once","Forest","Award","Carry","Pull","Loyalty","Reward","Each","According","Loyalty","Cow","Crucial",
+    "Revise","Leadership","Bodily","Release","Sensation","Receive","Through","Rainbow","Environment","Surrounding","Fingerprints","Fishing","Towards","Hurriedly","Hurried","Descend","Failure","Hug","Near","Must","Tell","Depths","Buried","Rumors","Rumour","Knife","Bone","Worried","Sickness","Roughty","Catch","Rough","Beat","Concession",
+    "Reduction","Remorse","Remorseful","Exclude","Retirement","Painful","Empathetic","Seek","Order","Search","Explore","Innovation","Still","Migration","Factory","Law","Lawfully","Regular","Disppearance","Grow","Growing","Low","High","Above","Same","Nosy","Wind","Whether","Dressed","Neatly","Nod","Handshake","Skin","Climb","Sea","Bag",
+    "Lizard","Edge","Mud","Down","Mostly","DownStairs","Desert","Harm","Knock","Lazy","Truth","Nosy","Snow","Both","Toothbrush","Feedback","Truck","Widen","Cut","Knit","Bag","Sea","Mud","Shoplifter","Shopkeeper","Rot","Cut","Row","Widen","UpStairs","Widen","Cut","Wave","Run","Brilliant","Love","Enormously","Enormous","Cage",
+    "Trailer","Crash","neat","Scientist","Destruction","Thoughtfully","Pregnant","Knit","Vacation","Nuts","Crazy","Fall","Gun","Bridge","Cheat","Box","Coward","Benefits","Disease","Reduce","Bell","Earthquake","Merge","Helpless","Cage","Cupboard","Cell","Seat","Escape","Boots","Themselves","Poisonous","Increase","Decline","Fridge","Negotiations"
+    ,"Rather","Unemployed","Capitulate","Alive","Entrance","Enjoy","Wastage","Wise","Unwise","Plenty","Desperate","Inquiry","Alive","Perceive","Daring","Disobeys","Surrender","Unemployment","Donate","Cave","Remains","Rest","Wave","Volcano","Act","Authorization","Agreement","Respiratory System","Sorrowful","Stuff","Sorrow","Chronic","Feet","Cheer",
+    "Wet","Wipe","Loo","Crowd","Crouch","Witty","Batter","Expand","Span","Desire","Let","Charm","Evoluction","Got it","Unsweetened","Sweetened","Celebration","Penis","Avoid","Let Down of ","Consent","Ring","Deport","Nap","Spill","Pee","Vibe","Approval","Bear","Humorous","Roots","Owl","Wallet","Scam","Fraud","Warehouse","Weightlifting","Parrot","Smack",
+    "Spoon","Delay","Criticize","Gap","Brand","Convey","Gradually","Guess","Drowning","Skin","Iceberg","Consolation","Commiseration","Guard","Savage","Lower","Worship","Spiritual","Lay","Sink","Put","Hat","Paradise","Heaven","Boobs","Banner","Wonder","Listen","Blink","Wrap","Arouse","Blaze","Firmly","Screw","Firm","Emergency","Lips","Trash","Trouble","Old","Roll",
+    "Fish","Weak","Dry","Ecology","Disapproval","Hall","Around","Sparrow","Own","Wonder","Necklace","Nobility","Crown","Almost","Allow","Audible","Ride","Absurd","Hardly","Unfair","Fair","Weird","Valley","Tunnel","Hard","Inaudible","Rubble","Scene","Explosive","Fail","Lousy","Selfish","Picnic","Spoiled","Horseshose","Lifeboat","Lifebelt","Ship","Waste","Glad",
+    "Dairy","Alley","Impound","Soundly","Coincidence","Sign","Bug","Shame","Church","Melt","Embarrassing","Embarrassment","Jail","Prison","Forgive","Forgiveness","Already","Mine","Split","GuardHouse","Sniff","Break","Religion","So","Tremble","Smooth","Provocation","Crew","Sluggish","Anchor","Regret","Fire","Testify","Punch","Freak","Realize","Teach","Letter","Butter",
+    "Positives","Negatives","Guide","Spot","Make","Warn","Exhale","Inhale","Iron","Until","Ugly","Goat","Partner","Concerning","Beast","Amount","infection","Dummy","Spectacular","Wire","Flesh","Flow","Arrest","Heavy","Jewellery","Breather","On Cusp","Unrecognizable","Recognizable","Confess","Greed","Craving","Blunder","Mate","Papers","Owe","Similarity","Similar","Curious","Urine"
+    ,"Marvellous","Recovery","Peak","Insane","Homeless","Eyebrows","Prevent","Evidence","Harmful","Sightseer","Cring","Puppet","Frustration","Heist","Shadow","Then","Least","Measly","Elegant","oblivion","Than","Untraceable","Traceable","Across","Blame","Disorder","Lame","Misery","Jerk","Expect","Hopeless","Cop","Bullet","Welding","Lurk"
+    ,"Bottom","Drawn","Inception","Beginning","Craft","Presume","Concern","Barn","Scatter","Funeral","Lurch","Construct","Incredible","Recently","Worldwide","Delightful","Poem","Spontaneous","Useful","Awful","Predictable","Permit","Devil","Weapon","Tower","Feather","Peninsula","Hell","Weep","Dip","Bankruptcy","Costy","Gasoline","Current","currently","Memo"
+    ,"Inevitable","Spell","Although","Since","despoil","Fewer","Dispatched","Grief","Toss","Adventure","Nightmare","Smother","Jam","Truly","Assure","Sin","Stomach","Rudeness","Paychecks","Wasteful","Purchase","Disappointed","Hire","Seminar","Shipwreck","Ransom","Furthermore","Bullet","Slave","Admiration","Slavish","Wreck","Moreover","In addition","Sunglasses"
+    ,"Import" ,"Vomit","Angry","Swift","Undoubtedly","Barefoot","Assume","Bargain","Belong","Improve","Grind","Addiction","Inability","Clock","Blind" ,"Vengeance","Aside","Side","Lend","Using","Request","Require","Statement","Pledge","Pie","Passenger","Chill","Bark","Contempt","Guilty","Exhausting","Tolerance","Sloth","Unwillingness","Willingness","Vend"
+    ,"Invention","Lonely","Pet","Smuggle","Pimple","Arrangement","Should","Elevator","Derogatory","Train","Ribcage","Whore","Farmer","Arise","Goods","Renewal", "Morons" ,"Vital","Necessary","Coma","Yawn" ,"Stance","Attitude","Maintain","Slaughter","Courthouse","Court" ,"Fix","Trap","Bible","Allocated","Appoint","Despite","Surgery","Loudly","Rent","Vision",
+    "Gossip","Debt","Introvert","Extrovert","Sociable","Digest","Upset","Dealer","Trader"];
+// Calculer le nombre de mots dans la variable )  "Awkward","Anxious","Firm","Kidney","Handle","Mishandled","Art Work","Lake","Sleek","Posture","Illness","Dickhead","Outage","Tap","Soap"
+         var nombreDeMots = listeDeNoms.length;    
+        var listeDeNoms2 = ["Debate","Peel","Prick","Despise","Sincerely","Fulfil","Pants","Balcony","Cancel","Soul","Sour","Choke","Scar","Hilarious"
+       ,"Belly","Trial","Spare","Fee","Alighted","Tend" ,"Serenity","Spread","Ritual","Whereas","Tone","Affluence","Wealth","Frank","Naive","Convinced"
+      ,"Oblivious","Rustic","Insulation","Conspicuous","Monument","Perils","Issue","Allergy","Roof","Leap"];
+      
+var nombreDeMots2 = listeDeNoms2.length;
+        var dernierNomAleatoire = "";
+        var dernierNomAleatoire2 = "";
+
+        // Variables pour compter les clics
+        var clicsGenererNomAleatoire1 = 0;
+        var clicsGenererNomAleatoire2 = 0;
+        function afficherClics() {
+            document.getElementById("clicsInfo").innerHTML = "  Clics Nom aléatoire  : " + clicsGenererNomAleatoire1 + "<br>Clics De liste Noire  : " + clicsGenererNomAleatoire2;
+        }
+        // Fonction pour générer un nom aléatoire de la première liste
+        function genererNomAleatoire() {
+            dernierNomAleatoire = listeDeNoms[Math.floor(Math.random() * listeDeNoms.length)];
+            document.getElementById("nomAleatoire").innerHTML = "Nom aléatoire: " + " " + dernierNomAleatoire + " ";
+            document.getElementById("nombreDeMots").innerHTML = "Nombre de mots dans la liste: " + listeDeNoms.length;
+            clicsGenererNomAleatoire1++;
+            afficherClics();
+        }
+        function rechercherDansDictionnaireAuto() {
+    if (dernierNomAleatoire) {
+        var url = "https://dictionary.cambridge.org/fr/dictionnaire/anglais-arabe/" + encodeURIComponent(dernierNomAleatoire);
+
+        // Ouvrir la fenêtre du navigateur avec l'URL de recherche
+        window.open(url, '_blank');
+    }
+   }
+   function rechercherAuto1() {
+    if (dernierNomAleatoire) {
+        var url = "https://translate.yandex.com/en/?source_lang=en&target_lang=ar&text=" + encodeURIComponent(dernierNomAleatoire);
+        window.open(url, '_blank');
+    }
+}
+       
+        // Fonction pour générer un nom aléatoire de la deuxième liste
+        function genererNomAleatoire2() {
+            dernierNomAleatoire2 = listeDeNoms2[Math.floor(Math.random() * listeDeNoms2.length)];
+            document.getElementById("nomAleatoire2").innerHTML = "Nom aléatoire de liste Noire : " + " " + dernierNomAleatoire2 + " ";
+            document.getElementById("nombreDeMots2").innerHTML = "Nombre de mots dans la liste Noire : " + listeDeNoms2.length;
+            clicsGenererNomAleatoire2++;
+            afficherClics();
+        }
+        function rechercherDansDictionnaireAuto2() {
+    if (dernierNomAleatoire2) {
+        var url = "https://dictionary.cambridge.org/fr/dictionnaire/anglais-arabe/" + encodeURIComponent(dernierNomAleatoire2);
+
+        // Ouvrir la fenêtre du navigateur avec l'URL de recherche
+        window.open(url, '_blank');
+    }
+}
+function rechercherAuto() {
+    if (dernierNomAleatoire2) {
+        var url = "https://translate.yandex.com/en/?source_lang=en&target_lang=ar&text=" + encodeURIComponent(dernierNomAleatoire2);
+        window.open(url, '_blank');
+    }
+}
+
+function verifierMot() {
+    // Récupérer la valeur de la zone de texte
+    var motAVerifier = document.getElementById("inputMot").value.toLowerCase(); // Convertir en minuscules
+
+    // Convertir tous les mots dans la liste en minuscules
+    var listeDeNomsMinuscules = listeDeNoms.map(function (mot) {
+        return mot.toLowerCase();
+    });
+
+    // Vérifier si le mot existe dans la liste
+    if (listeDeNomsMinuscules.includes(motAVerifier)) {
+        alert("Le mot existe dans la liste !");
+    } else {
+        alert("Le mot n'existe pas dans la liste.");
+    }
+}
+
+
+function basculerMode() {
+        document.body.classList.toggle("mode-nuit");
+    }
+
+
+
+        
+    </script>
+
+    <!-- Ajoutez le script CDN Bootstrap pour Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-eOJMYsd53Z5J3bBoL5RSrV6g6C5w5S6TNKbsKkHHMIo7iCFQyKgQVlZaUjI8f31Y" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
