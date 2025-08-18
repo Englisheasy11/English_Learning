@@ -83,6 +83,72 @@
         .btn-pause { background-color: var(--pause-color); color: white; }
         .btn-pause:hover { background-color: #e1930b; }
         .btn-success { background-color: var(--success-color); border-color: var(--success-color); }
+         .contact { padding: 4rem 0; }
+        .heading { font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 3rem; }
+        .heading span { color: var(--primary-color); }
+        .contact-container { max-width: 800px; margin: 0 auto; background-color: #fff; padding: 2.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); }
+        .form-row { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+        .form-group { flex: 1; text-align: left; margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #555; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #ccc; background-color: #f8f9fa; font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 8px rgba(67, 97, 238, 0.3); }
+        .contact .btn i { margin-left: 8px; }
+        @media (max-width: 768px) { .form-row { flex-direction: column; gap: 0; } }
+        /* --- Styles Dark Mode pour le Contact --- */
+        .dark-mode .heading span { color: var(--accent-color); }
+        .dark-mode .contact-container { background-color: #16213e; }
+        .dark-mode .form-group label { color: #ced4da; }
+        .dark-mode .form-group input, .dark-mode .form-group textarea { background-color: #1a1a2e; border-color: #0f3460; color: #e6e6e6; }
+        .dark-mode .form-group input::placeholder, .dark-mode .form-group textarea::placeholder { color: #888; }
+         .reviews { padding-bottom: 4rem; }
+        .review-form-container, .review-item {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+        .review-item {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--accent-color);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .review-header h5 {
+            margin-bottom: 0;
+            color: var(--primary-color);
+        }
+        .review-stars .fas.fa-star { color: #ffc107; }
+        .review-stars .far.fa-star { color: #e0e0e0; }
+        .review-comment { color: #555; }
+
+               /* Style pour les étoiles du formulaire (CORRIGÉ) */
+        .star-rating-input {
+            display: flex;
+            flex-direction: row-reverse; /* Important pour l'effet de survol */
+            justify-content: center;
+            width: 100%;
+        }
+        .star-rating-input > input[type="radio"] { display: none; }
+        .star-rating-input > label {
+            color: #ddd;
+            font-size: 2rem;
+            padding: 0 0.3rem;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+        .star-rating-input > label:hover,
+        .star-rating-input > label:hover ~ label { color: var(--pause-color); }
+        .star-rating-input > input[type="radio"]:checked ~ label { color: var(--pause-color); }
+
+        /* Dark Mode pour les avis */
+        .dark-mode .review-form-container, .dark-mode .review-item { background-color: #16213e; }
+        .dark-mode .review-header h5 { color: var(--accent-color); }
+        .dark-mode .review-comment { color: #ced4da; }
     </style>
 </head>
 <body>
@@ -147,7 +213,78 @@
     </div>
 
     <div class="floating-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode"><i id="floatingIcon" class="fas fa-moon"></i></div>
-    
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <h2 class="heading">User <span>Reviews</span></h2>
+
+            <!-- Formulaire pour laisser un avis -->
+            <div class="card review-form-container mb-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">Leave Your Rating</h5>
+                    <form id="review-form">
+                        <div class="form-group mb-3">
+                            <label for="reviewer-name">Your Name</label>
+                            <input type="text" id="reviewer-name" class="form-control" required>
+                        </div>
+                        <div class="form-group mb-3 text-center">
+                            <label class="d-block mb-2">Your Rating</label>
+                            <div class="star-rating-input">
+                                <!-- Les étoiles sont inversées pour l'astuce CSS -->
+                                <input type="radio" id="star5" name="rating" value="5" required/><label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="review-comment">Your Comment</label>
+                            <textarea id="review-comment" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Review</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Liste des avis existants -->
+            <h4 class="text-center mb-4">What Others Are Saying</h4>
+            <div id="reviews-list">
+                <!-- Les avis seront injectés ici par JavaScript -->
+            </div>
+        </div>
+    </section>
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="heading">Leave a <span>Feedback !</span></h2>
+            <div class="contact-container">
+                <form action="https://api.web3forms.com/submit" method="POST">
+                    <input type="hidden" name="access_key" value="4d860316-2426-450c-9ac1-b0de66035b3c">
+                    <input type="hidden" name="subject" value="New Feedback from English Learning Hub">
+                    <input type="hidden" name="from_name" value="English Hub User">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" rows="7" required></textarea>
+                    </div>
+                    <div class="form-button text-center">
+                        <button type="submit" class="btn btn-primary">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
     <footer class="site-footer py-4 mt-5 border-top"><div class="container text-center"><p class="mb-0 text-muted small">© <span id="copyright-year"></span> Vocabulary & Reading Hub by Easy_english.<a href="https://github.com/Englisheasy11" target="_blank" rel="noopener noreferrer" class="link-secondary text-decoration-none ms-2"><i class="fab fa-github"></i> View on GitHub</a></p></div></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -10374,7 +10511,10 @@
         const itemsPerPage = 3; 
 
         const allDomElements = {
-            currentWord: document.getElementById('currentWord'), wordPronunciation: document.getElementById('wordPronunciation'), speakBtn: document.getElementById('speakBtn'), wordType: document.getElementById('wordType'), wordDefinition: document.getElementById('wordDefinition'), exampleSentence1: document.getElementById('exampleSentence1'), exampleSentence2: document.getElementById('exampleSentence2'), wordSynonyms: document.getElementById('wordSynonyms'), wordLevel: document.getElementById('wordLevel'), quizQuestion: document.getElementById('quizQuestion'), quizOptions: document.getElementById('quizOptions'), quizFeedback: document.getElementById('quizFeedback'), writingWord: document.getElementById('writingWord'), writingSentence: document.getElementById('writingSentence'), writingFeedback: document.getElementById('writingFeedback'), motivationImage: document.getElementById('motivationImage'), motivationTitle: document.getElementById('motivationTitle'), motivationText: document.getElementById('motivationText'), floatingIcon: document.getElementById('floatingIcon'), searchInput: document.getElementById('searchInput'), searchResults: document.getElementById('searchResults'), copyrightYear: document.getElementById('copyright-year'), totalWordCount: document.getElementById('totalWordCount'), generatedWordCount: document.getElementById('generatedWordCount'), scoreDisplay: document.querySelector('#scoreDisplay span'), streakDisplay: document.querySelector('#streakDisplay span'), totalListeNoireWordCount: document.getElementById('totalListeNoireWordCount'), generatedListeNoireWordCount: document.getElementById('generatedListeNoireWordCount'), listeNoireScoreDisplay: document.querySelector('#listeNoireScoreDisplay span'), listeNoireStreakDisplay: document.querySelector('#listeNoireStreakDisplay span'), mainContent: document.getElementById('mainContent'), readingView: document.getElementById('readingView'), readingList: document.getElementById('readingList'), readingTitle: document.getElementById('readingTitle'), readingContent: document.getElementById('readingContent'), readTextBtn: document.getElementById('readTextBtn'), restartTextBtn: document.getElementById('restartTextBtn'), difficultWords: document.getElementById('difficultWords'), prevPageBtn: document.getElementById('prev-page-btn'), nextPageBtn: document.getElementById('next-page-btn'), pageInfo: document.getElementById('page-info')
+            currentWord: document.getElementById('currentWord'), wordPronunciation: document.getElementById('wordPronunciation'), speakBtn: document.getElementById('speakBtn'), wordType: document.getElementById('wordType'), wordDefinition: document.getElementById('wordDefinition'), exampleSentence1: document.getElementById('exampleSentence1'), exampleSentence2: document.getElementById('exampleSentence2'), wordSynonyms: document.getElementById('wordSynonyms'), wordLevel: document.getElementById('wordLevel'), quizQuestion: document.getElementById('quizQuestion'), quizOptions: document.getElementById('quizOptions'), quizFeedback: document.getElementById('quizFeedback'), writingWord: document.getElementById('writingWord'), writingSentence: document.getElementById('writingSentence'), writingFeedback: document.getElementById('writingFeedback'), motivationImage: document.getElementById('motivationImage'), motivationTitle: document.getElementById('motivationTitle'), motivationText: document.getElementById('motivationText'), floatingIcon: document.getElementById('floatingIcon'), searchInput: document.getElementById('searchInput'), searchResults: document.getElementById('searchResults'), copyrightYear: document.getElementById('copyright-year'), totalWordCount: document.getElementById('totalWordCount'), generatedWordCount: document.getElementById('generatedWordCount'), scoreDisplay: document.querySelector('#scoreDisplay span'), streakDisplay: document.querySelector('#streakDisplay span'), totalListeNoireWordCount: document.getElementById('totalListeNoireWordCount'), generatedListeNoireWordCount: document.getElementById('generatedListeNoireWordCount'), listeNoireScoreDisplay: document.querySelector('#listeNoireScoreDisplay span'), listeNoireStreakDisplay: document.querySelector('#listeNoireStreakDisplay span'), mainContent: document.getElementById('mainContent'), readingView: document.getElementById('readingView'), readingList: document.getElementById('readingList'), readingTitle: document.getElementById('readingTitle'), readingContent: document.getElementById('readingContent'), readTextBtn: document.getElementById('readTextBtn'), restartTextBtn: document.getElementById('restartTextBtn'), difficultWords: document.getElementById('difficultWords'), prevPageBtn: document.getElementById('prev-page-btn'), nextPageBtn: document.getElementById('next-page-btn'), 
+            pageInfo: document.getElementById('page-info'),
+            reviewForm: document.getElementById('review-form'),
+    reviewsList: document.getElementById('reviews-list')
         };
 
         function init() {
@@ -10389,8 +10529,86 @@
             allDomElements.copyrightYear.textContent = new Date().getFullYear();
             allDomElements.prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; populateReadingList(); } });
             allDomElements.nextPageBtn.addEventListener('click', () => { const totalPages = Math.ceil(readingDatabase.length / itemsPerPage); if (currentPage < totalPages) { currentPage++; populateReadingList(); } });
+          loadReviews(); // Charge et affiche les avis sauvegardés
+    allDomElements.reviewForm.addEventListener('submit', handleReviewSubmit); 
+        
+        }
+         let reviews = [];
+ function handleReviewSubmit(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const nameInput = document.getElementById('reviewer-name');
+            const commentInput = document.getElementById('review-comment');
+            const ratingInput = document.querySelector('input[name="rating"]:checked');
+
+            if (!ratingInput) {
+                alert('Please select a star rating.');
+                return;
+            }
+
+            const newReview = {
+                name: nameInput.value.trim() || 'Anonymous',
+                rating: parseInt(ratingInput.value, 10),
+                comment: commentInput.value.trim(),
+                date: new Date().toISOString()
+            };
+
+            reviews.unshift(newReview); // Ajoute le nouvel avis au début de la liste
+            saveReviews();
+            renderReviews(); // Affiche la liste mise à jour
+            allDomElements.reviewForm.reset(); // Vide le formulaire
         }
 
+        /** Sauvegarde la liste des avis dans le localStorage */
+        function saveReviews() {
+            localStorage.setItem('englishHubReviews', JSON.stringify(reviews));
+        }
+
+        /** Charge les avis depuis le localStorage au démarrage */
+        function loadReviews() {
+             const savedReviews = localStorage.getItem('englishHubReviews');
+            if (savedReviews) {
+                reviews = JSON.parse(savedReviews);
+            }
+            renderReviews();
+        }
+
+        /** Affiche tous les avis à l'écran */
+        function renderReviews() {
+            allDomElements.reviewsList.innerHTML = ''; // Vide la liste actuelle
+
+            if (reviews.length === 0) {
+                allDomElements.reviewsList.innerHTML = '<p class="text-center text-muted">No reviews yet. Be the first to leave one!</p>';
+                return;
+            }
+
+            reviews.forEach(review => {
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'review-item animate__animated animate__fadeInUp';
+                
+                reviewElement.innerHTML = `
+                    <div class="review-header">
+                        <h5>${review.name}</h5>
+                        <div class="review-stars">${generateStarsHTML(review.rating)}</div>
+                    </div>
+                    <p class="review-comment">${review.comment}</p>
+                `;
+                allDomElements.reviewsList.appendChild(reviewElement);
+            });
+        }
+
+        /** Génère le HTML pour les étoiles (pleines et vides) */
+        function generateStarsHTML(rating) {
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHTML += '<i class="fas fa-star"></i>'; // Étoile pleine
+                } else {
+                    starsHTML += '<i class="far fa-star"></i>'; // Étoile vide
+                }
+            }
+            return starsHTML;
+        }
         function populateReadingList() {
             allDomElements.readingList.innerHTML = '';
             const startIndex = (currentPage - 1) * itemsPerPage;
