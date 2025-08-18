@@ -23,10 +23,12 @@
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
         .word-card { background: white; border-left: 5px solid var(--primary-color); }
         .word-display { font-size: 2.5rem; font-weight: 700; color: var(--primary-color); word-break: break-word; }
-        .btn-primary { background-color: var(--primary-color); border: none; padding: 10px 25px; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; }
-        .btn-primary:hover:not(:disabled) { background-color: var(--secondary-color); transform: translateY(-2px); }
-        .btn-danger { background-color: var(--liste-noire-primary); border: none; padding: 10px 25px; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; }
-        .btn-danger:hover:not(:disabled) { background-color: var(--liste-noire-secondary); transform: translateY(-2px); }
+        .btn-primary, .btn-secondary, .btn-danger { border: none; padding: 10px 25px; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary:hover:not(:disabled), .btn-secondary:hover:not(:disabled), .btn-danger:hover:not(:disabled) { transform: translateY(-2px); }
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-primary:hover:not(:disabled) { background-color: var(--secondary-color); }
+        .btn-danger { background-color: var(--liste-noire-primary); }
+        .btn-danger:hover:not(:disabled) { background-color: var(--liste-noire-secondary); }
         .badge-level { padding: 5px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; color: #333; }
         .badge-a1 { background-color: var(--a1-color); } .badge-a2 { background-color: var(--a2-color); } .badge-b1 { background-color: var(--b1-color); } .badge-b2 { background-color: var(--b2-color); } .badge-c1 { background-color: var(--c1-color); } .badge-c2 { background-color: var(--c2-color); } .badge-unknown { background-color: var(--unknown-color); color: #6c757d; }
         .dark-mode { background-color: #1a1a2e; color: #e6e6e6; }
@@ -63,8 +65,6 @@
         .hero-section .nav-tabs .nav-link { color: rgba(255,255,255,0.7); border: none; background: transparent; }
         .hero-section .nav-tabs .nav-link.active { color: #fff; font-weight: bold; border-bottom: 3px solid var(--accent-color); }
         .hero-section .tab-content { padding: 2rem 0; }
-
-        /* --- STYLES POUR LA SECTION LECTURE --- */
         #readingView { display: none; }
         .reading-list-item { padding: 15px; background-color: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: background-color 0.3s ease; }
         .reading-list-item:hover { background-color: rgba(255,255,255,0.2); }
@@ -73,15 +73,8 @@
         #readingContent span:hover { background-color: var(--accent-color); color: var(--dark-color); border-radius: 3px; }
         .difficult-word { color: var(--reading-color); font-weight: bold; }
         .dark-mode .difficult-word { color: var(--pause-color); }
-        .speaking-highlight {
-            background-color: var(--accent-color);
-            color: var(--dark-color) !important;
-            border-radius: 3px;
-        }
-        .dark-mode .speaking-highlight {
-            background-color: var(--primary-color);
-            color: white !important;
-        }
+        .speaking-highlight { background-color: var(--accent-color); color: var(--dark-color) !important; border-radius: 3px; }
+        .dark-mode .speaking-highlight { background-color: var(--primary-color); color: white !important; }
         #difficultWords ul { list-style-type: none; padding-left: 0; }
         #difficultWords li { margin-bottom: 5px; }
         .btn-reading { background-color: var(--reading-color); color: white; }
@@ -98,42 +91,33 @@
             <h1 class="display-4 fw-bold mb-3">English Learning Hub</h1>
             
             <ul class="nav nav-tabs justify-content-center" id="generatorTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="vocabulary-tab" data-bs-toggle="tab" data-bs-target="#vocabularyTab" type="button" role="tab">Vocabulary</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="listeNoire-tab" data-bs-toggle="tab" data-bs-target="#listeNoireTab" type="button" role="tab">Liste Noire</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="reading-practice-tab" data-bs-toggle="tab" data-bs-target="#readingTab" type="button" role="tab">Reading Practice</button>
-                </li>
+                <li class="nav-item" role="presentation"><button class="nav-link active" id="vocabulary-tab" data-bs-toggle="tab" data-bs-target="#vocabularyTab" type="button" role="tab">Vocabulary</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="listeNoire-tab" data-bs-toggle="tab" data-bs-target="#listeNoireTab" type="button" role="tab">Liste Noire</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="reading-practice-tab" data-bs-toggle="tab" data-bs-target="#readingTab" type="button" role="tab">Reading Practice</button></li>
             </ul>
 
             <div class="tab-content" id="generatorTabsContent">
                 <div class="tab-pane fade show active" id="vocabularyTab" role="tabpanel">
                     <p class="lead mb-4">Learn new words and track your progress.</p>
                     <p class="text-light small mb-4">Total Words: <span id="totalWordCount" class="word-count-badge">0</span> | Generated This Session: <span id="generatedWordCount" class="word-count-badge">0</span></p>
-                    <div class="score-board mb-4">
-                        <div class="score-item" id="scoreDisplay"><i class="fas fa-star"></i>Score: <span>0</span></div>
-                        <div class="score-item" id="streakDisplay"><i class="fas fa-fire"></i>Streak: <span>0 days</span></div>
-                    </div>
+                    <div class="score-board mb-4"><div class="score-item" id="scoreDisplay"><i class="fas fa-star"></i>Score: <span>0</span></div><div class="score-item" id="streakDisplay"><i class="fas fa-fire"></i>Streak: <span>0 days</span></div></div>
                     <button class="btn btn-primary btn-lg" onclick="generateWord('vocabulary')"><i class="fas fa-random me-2"></i>Generate Word</button>
                 </div>
 
                 <div class="tab-pane fade" id="listeNoireTab" role="tabpanel">
                     <p class="lead mb-4">Practice specific words from your custom list.</p>
                     <p class="text-light small mb-4">Total Words: <span id="totalListeNoireWordCount" class="word-count-badge">0</span> | Generated This Session: <span id="generatedListeNoireWordCount" class="word-count-badge">0</span></p>
-                    <div class="score-board mb-4">
-                        <div class="score-item" id="listeNoireScoreDisplay"><i class="fas fa-seedling"></i>Mustard: <span>0</span></div>
-                        <div class="score-item" id="listeNoireStreakDisplay"><i class="fas fa-skiing"></i>Skirs: <span>0 days</span></div>
-                    </div>
+                    <div class="score-board mb-4"><div class="score-item" id="listeNoireScoreDisplay"><i class="fas fa-seedling"></i>Mustard: <span>0</span></div><div class="score-item" id="listeNoireStreakDisplay"><i class="fas fa-skiing"></i>Skirs: <span>0 days</span></div></div>
                     <button class="btn btn-danger btn-lg" onclick="generateWord('listeNoire')"><i class="fas fa-skull-crossbones me-2"></i>Generate from List</button>
                 </div>
 
                 <div class="tab-pane fade" id="readingTab" role="tabpanel">
                     <p class="lead mb-4">Improve your reading and listening skills.</p>
-                    <div id="readingList" class="text-start mx-auto" style="max-width: 700px;">
-                        <!-- La liste des textes sera injectée ici par JavaScript -->
+                    <div id="readingList" class="text-start mx-auto" style="max-width: 700px; min-height: 180px;"></div>
+                    <div class="pagination-controls mt-3 d-flex justify-content-center align-items-center">
+                        <button id="prev-page-btn" class="btn btn-sm btn-light">Previous</button>
+                        <span id="page-info" class="mx-3"></span>
+                        <button id="next-page-btn" class="btn btn-sm btn-light">Next</button>
                     </div>
                 </div>
             </div>
@@ -143,178 +127,31 @@
     <div class="container my-5">
         <div class="row mb-4">
             <div class="col-lg-8 mx-auto position-relative">
-                <div class="input-group search-input-group">
-                     <span class="input-group-text search-icon-span"><i class="fas fa-search"></i></span>
-                     <input type="search" id="searchInput" class="form-control search-input" placeholder="Search for a word in the active list..." autocomplete="off">
-                </div>
+                <div class="input-group search-input-group"><span class="input-group-text search-icon-span"><i class="fas fa-search"></i></span><input type="search" id="searchInput" class="form-control search-input" placeholder="Search for a word in the active list..." autocomplete="off"></div>
                 <div id="searchResults" class="search-results-container mt-1"></div>
             </div>
         </div>
         
         <div id="readingView" class="col-lg-8 mx-auto">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 id="readingTitle" class="mb-0"></h3>
-                        <button class="btn btn-secondary" onclick="goBackToMainView()"><i class="fas fa-arrow-left me-2"></i>Back</button>
-                    </div>
-                    <div class="playback-controls mb-3">
-                        <button id="readTextBtn" class="btn btn-reading"><i class="fas fa-volume-up me-2"></i>Read Text Aloud</button>
-                        <button id="restartTextBtn" class="btn btn-secondary" style="display: none;"><i class="fas fa-redo me-2"></i>Restart</button>
-                    </div>
-                    <p id="readingContent" class="lead" style="line-height: 2;"></p>
-                    <hr>
-                    <div id="difficultWords">
-                        <h5 class="mt-3">Difficult Words:</h5>
-                    </div>
-                </div>
-            </div>
+            <div class="card"><div class="card-body"><div class="d-flex justify-content-between align-items-center mb-3"><h3 id="readingTitle" class="mb-0"></h3><button class="btn btn-secondary" onclick="goBackToMainView()"><i class="fas fa-arrow-left me-2"></i>Back</button></div><div class="playback-controls mb-3"><button id="readTextBtn" class="btn btn-reading"><i class="fas fa-volume-up me-2"></i>Read Text Aloud</button><button id="restartTextBtn" class="btn btn-secondary" style="display: none;"><i class="fas fa-redo me-2"></i>Restart</button></div><p id="readingContent" class="lead" style="line-height: 2;"></p><hr><div id="difficultWords"><h5 class="mt-3">Difficult Words:</h5></div></div></div>
         </div>
 
         <div id="mainContent" class="row">
             <div class="col-lg-8 mx-auto">
-                <div class="card motivation-card animate__animated animate__fadeInUp">
-                    <div class="card-body">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2995/2995111.png" alt="Motivation Gift" id="motivationImage">
-                        <h4 id="motivationTitle">Let's get started!</h4>
-                        <p id="motivationText" class="text-muted">Generate your first word to earn points and build your streak.</p>
-                    </div>
-                </div>
-
-                <div class="card word-card animate__animated animate__fadeInUp">
-                    <div class="card-body text-center">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge badge-level" id="wordLevel"></span>
-                        </div>
-                        <h2 class="word-display" id="currentWord"></h2>
-                        <div class="pronunciation-container">
-                            <p class="pronunciation" id="wordPronunciation"></p>
-                            <button id="speakBtn" onclick="speakWord()" title="Pronounce word"><i class="fas fa-volume-up"></i></button>
-                        </div>
-                        <span class="word-type" id="wordType"></span>
-                        <div class="mt-4 text-start">
-                            <h5>Definition:</h5>
-                            <p id="wordDefinition"></p>
-                            <h5 class="mt-3">Example Sentences:</h5>
-                            <div class="example-sentence" id="exampleSentence1"></div>
-                            <div class="example-sentence" id="exampleSentence2"></div>
-                            <div class="synonyms-container mt-3">
-                                <h5>Synonyms:</h5>
-                                <div class="synonyms" id="wordSynonyms"></div>
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="generateWord()"><i class="fas fa-random me-2"></i>New Word</button>
-                            <button class="btn btn-primary" onclick="searchDictionary()"><i class="fas fa-book me-2"></i>Dictionary</button>
-                            <button class="btn btn-primary" onclick="translateWord()"><i class="fas fa-language me-2"></i>Translate</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs" id="practiceTabs" role="tablist">
-                            <li class="nav-item" role="presentation"><button class="nav-link active" id="quiz-tab" data-bs-toggle="tab" data-bs-target="#quiz" type="button" role="tab">Quiz</button></li>
-                            <li class="nav-item" role="presentation"><button class="nav-link" id="writing-tab" data-bs-toggle="tab" data-bs-target="#writing" type="button" role="tab">Writing</button></li>
-                        </ul>
-                        <div class="tab-content" id="practiceTabContent">
-                            <div class="tab-pane fade show active" id="quiz" role="tabpanel">
-                                <h5>Test Your Understanding</h5>
-                                <p id="quizQuestion"></p>
-                                <div class="list-group" id="quizOptions"></div>
-                                <div id="quizFeedback" class="mt-3"></div>
-                            </div>
-                            <div class="tab-pane fade" id="writing" role="tabpanel">
-                                <h5>Practice Writing</h5>
-                                <p>Use the word "<span id="writingWord"></span>" in a sentence:</p>
-                                <textarea class="form-control mb-3" rows="3" id="writingSentence" placeholder="Type your sentence here..."></textarea>
-                                <button class="btn btn-primary" onclick="checkWriting()">Check Sentence</button>
-                                <div id="writingFeedback" class="mt-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="card motivation-card animate__animated animate__fadeInUp"><div class="card-body"><img src="https://cdn-icons-png.flaticon.com/512/2995/2995111.png" alt="Motivation Gift" id="motivationImage"><h4 id="motivationTitle">Let's get started!</h4><p id="motivationText" class="text-muted">Generate your first word to earn points and build your streak.</p></div></div>
+                <div class="card word-card animate__animated animate__fadeInUp"><div class="card-body text-center"><div class="d-flex justify-content-between align-items-center mb-3"><span class="badge badge-level" id="wordLevel"></span></div><h2 class="word-display" id="currentWord"></h2><div class="pronunciation-container"><p class="pronunciation" id="wordPronunciation"></p><button id="speakBtn" onclick="speakWord()" title="Pronounce word"><i class="fas fa-volume-up"></i></button></div><span class="word-type" id="wordType"></span><div class="mt-4 text-start"><h5>Definition:</h5><p id="wordDefinition"></p><h5 class="mt-3">Example Sentences:</h5><div class="example-sentence" id="exampleSentence1"></div><div class="example-sentence" id="exampleSentence2"></div><div class="synonyms-container mt-3"><h5>Synonyms:</h5><div class="synonyms" id="wordSynonyms"></div></div></div><div class="action-buttons"><button class="btn btn-primary" onclick="generateWord()"><i class="fas fa-random me-2"></i>New Word</button><button class="btn btn-primary" onclick="searchDictionary()"><i class="fas fa-book me-2"></i>Dictionary</button><button class="btn btn-primary" onclick="translateWord()"><i class="fas fa-language me-2"></i>Translate</button></div></div></div>
+                <div class="card mt-4"><div class="card-body"><ul class="nav nav-tabs" id="practiceTabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="quiz-tab" data-bs-toggle="tab" data-bs-target="#quiz" type="button" role="tab">Quiz</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="writing-tab" data-bs-toggle="tab" data-bs-target="#writing" type="button" role="tab">Writing</button></li></ul><div class="tab-content" id="practiceTabContent"><div class="tab-pane fade show active" id="quiz" role="tabpanel"><h5>Test Your Understanding</h5><p id="quizQuestion"></p><div class="list-group" id="quizOptions"></div><div id="quizFeedback" class="mt-3"></div></div><div class="tab-pane fade" id="writing" role="tabpanel"><h5>Practice Writing</h5><p>Use the word "<span id="writingWord"></span>" in a sentence:</p><textarea class="form-control mb-3" rows="3" id="writingSentence" placeholder="Type your sentence here..."></textarea><button class="btn btn-primary" onclick="checkWriting()">Check Sentence</button><div id="writingFeedback" class="mt-3"></div></div></div></div></div>
             </div>
         </div>
     </div>
 
     <div class="floating-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode"><i id="floatingIcon" class="fas fa-moon"></i></div>
     
-    <footer class="site-footer py-4 mt-5 border-top">
-        <div class="container text-center">
-            <p class="mb-0 text-muted small">© <span id="copyright-year"></span> Vocabulary & Reading Hub by Easy_ensglish.
-                <a href="https://github.com/Englisheasy11" target="_blank" rel="noopener noreferrer" class="link-secondary text-decoration-none ms-2"><i class="fab fa-github"></i> View on GitHub</a>
-            </p>
-        </div>
-    </footer>
+    <footer class="site-footer py-4 mt-5 border-top"><div class="container text-center"><p class="mb-0 text-muted small">© <span id="copyright-year"></span> Vocabulary & Reading Hub by Easy_ensglish.<a href="https://github.com/Englisheasy11" target="_blank" rel="noopener noreferrer" class="link-secondary text-decoration-none ms-2"><i class="fab fa-github"></i> View on GitHub</a></p></div></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- Bases de données ---
-        // --- Base de données de mots ---
-             // --- Base de données de mots ---
-        const wordDatabase = [
-            { word: "Prediction", pronunciation: "/prɪˈdɪkʃən/", type: "noun", definition: "A statement saying what will happen in the future.", examples: ["Please don't ask me to make any predictions about tomorrow's meeting.", "The prediction of snow for Christmas did not come true."], synonyms: ["forecast", "prophecy", "prognosis", "outlook", "projection"], level: "b1" },
-            { word: "Desert", pronunciation: "/ˈdɛzərt/ (noun), /dɪˈzɜːrt/ (verb)", type: "noun, verb", definition: "(noun) A large area of land with little water and few plants, often covered by sand. (verb) To leave someone or something without help or support.", examples: ["The Sahara is a vast desert.", "He deserted his wife and family for another woman."], synonyms: ["(n) wasteland", "arid region", "(v) abandon", "forsake", "leave", "strand"], level: "a2" },
-            { word: "Descend", pronunciation: "/dɪˈsɛnd/", type: "verb", definition: "To go or come down from a higher place to a lower level.", examples: ["The plane began to descend.", "She descended the stairs slowly."], synonyms: ["go down", "come down", "drop", "fall", "sink"], level: "b1" },
-            { word: "Popular", pronunciation: "/ˈpɒpjələr/", type: "adjective", definition: "Liked, enjoyed, or supported by many people.", examples: ["She's the most popular teacher in school.", "That song was popular with people from my father's generation."], synonyms: ["well-liked", "favored", "in demand", "fashionable", "common"], level: "a2" },
-            { word: "Sit", pronunciation: "/sɪt/", type: "verb", definition: "To rest your body with your bottom on a chair or the ground.", examples: ["Please sit down.", "He came and sat next to me."], synonyms: ["be seated", "take a seat", "rest"], level: "a1" },
-            { word: "Sofa", pronunciation: "/ˈsoʊfə/", type: "noun", definition: "A long, soft seat with a back and usually arms, on which more than one person can sit.", examples: ["We bought a new sofa for the living room.", "He was lounging on the sofa watching TV."], synonyms: ["couch", "settee", "divan"], level: "a1" },
-            { word: "Bed", pronunciation: "/bɛd/", type: "noun", definition: "A piece of furniture that you sleep or rest on.", examples: ["I'm tired, I'm going to bed.", "She made the bed this morning."], synonyms: ["cot", "bunk", "berth"], level: "a1" },
-            { word: "Recipes", pronunciation: "/ˈrɛsəpiz/", type: "noun (plural)", definition: "Sets of instructions for preparing a particular dish, including a list of the ingredients required.", examples: ["Do you have a good recipe for chocolate cake?", "I found some interesting recipes online."], synonyms: ["cooking instructions", "formulas"], level: "a2" },
-            { word: "Instead", pronunciation: "/ɪnˈstɛd/", type: "adverb", definition: "In the place of someone or something else.", examples: ["There's no coffee, would you like tea instead?", "If you don't want to go out, we could order pizza instead."], synonyms: ["alternatively", "rather", "in place of"], level: "a2" },
-            { word: "Absolutely", pronunciation: "/ˈæbsəluːtli/", type: "adverb", definition: "Used to emphasize that something is completely true; used as a strong way of saying 'yes'.", examples: ["Are you sure you're okay? Absolutely!", "It was an absolutely fantastic performance."], synonyms: ["completely", "totally", "utterly", "definitely", "certainly"], level: "b1" },
-            { word: "Downright", pronunciation: "/ˈdaʊnraɪt/", type: "adverb, adjective", definition: "(adv) Extremely or completely; (adj) (of something bad or unpleasant) utter; complete.", examples: ["It's downright unfair!", "She was downright rude to him.", "He's telling downright lies."], synonyms: ["utterly", "thoroughly", "totally", "complete", "absolute"], level: "c1" },
-            { word: "Earn", pronunciation: "/ɜːrn/", type: "verb", definition: "To receive money as payment for work that you do; to get something that you deserve.", examples: ["How much do you earn, if you don't mind me asking?", "He earned a reputation for honesty."], synonyms: ["make", "get", "receive", "gain", "deserve", "merit"], level: "a2" },
-            { word: "Husband", pronunciation: "/ˈhʌzbənd/", type: "noun", definition: "The man that a woman is married to.", examples: ["I've never met her husband.", "She introduced me to her husband."], synonyms: ["spouse", "partner", "hubby (informal)"], level: "a1" },
-            { word: "Holdings", pronunciation: "/ˈhoʊldɪŋz/", type: "noun (plural)", definition: "Stocks, property, and other financial assets owned by a person or organization.", examples: ["The company revealed its holdings in the energy sector.", "His property holdings are extensive."], synonyms: ["assets", "possessions", "investments", "property", "shares"], level: "c1" },
-            { word: "Salary", pronunciation: "/ˈsæləri/", type: "noun", definition: "A fixed amount of money agreed every year as pay for an employee, usually paid directly into their bank account every month.", examples: ["She's on a good salary.", "He receives an annual salary of $50,000."], synonyms: ["pay", "wages", "income", "earnings", "remuneration"], level: "b1" },
-            { word: "Income", pronunciation: "/ˈɪnkʌm/", type: "noun", definition: "Money received, especially on a regular basis, for work or through investments.", examples: ["What is your approximate annual income?", "Tourism is a major source of income for the area."], synonyms: ["earnings", "revenue", "pay", "salary", "profit"], level: "b1" },
-            { word: "Monthly", pronunciation: "/ˈmʌnθli/", type: "adjective, adverb", definition: "Done, produced, or occurring once a month.", examples: ["We have a monthly team meeting.", "The rent is paid monthly."], synonyms: ["every month", "month by month"], level: "a2" },
-            { word: "Annual", pronunciation: "/ˈænjuəl/", type: "adjective", definition: "Occurring once every year.", examples: ["The company holds an annual conference.", "What is your annual income?"], synonyms: ["yearly", "once a year"], level: "b1" },
-            { word: "Weekly", pronunciation: "/ˈwiːkli/", type: "adjective, adverb", definition: "Done, produced, or occurring once a week.", examples: ["I get a weekly allowance.", "The magazine is published weekly."], synonyms: ["every week", "week by week"], level: "a2" },
-            { word: "Also", pronunciation: "/ˈɔːlsoʊ/", type: "adverb", definition: "In addition; too.", examples: ["She speaks French and also a little Spanish.", "I'm cold, and I'm also hungry."], synonyms: ["too", "as well", "in addition", "besides", "furthermore"], level: "a1" },
-            { word: "Hit", pronunciation: "/hɪt/", type: "verb, noun", definition: "(verb) To bring one's hand or a tool or weapon into contact with (someone or something) quickly and forcefully; (noun) An instance of hitting or being hit; a successful venture, especially a song or film.", examples: ["She hit him on the head with her umbrella.", "The song was a big hit in the summer.", "The company took a hit during the recession."], synonyms: ["(v) strike", "smack", "punch", "beat", "(n) blow", "impact", "success", "smash"], level: "a2" },
-            { word: "Incident", pronunciation: "/ˈɪnsɪdənt/", type: "noun", definition: "An event or occurrence, especially one that is unpleasant or unusual.", examples: ["Police are investigating the incident.", "There was a small incident involving a spilled drink."], synonyms: ["event", "occurrence", "episode", "affair", "happening"], level: "b1" },
-            { word: "State", pronunciation: "/steɪt/", type: "noun, verb", definition: "(noun) The particular condition that someone or something is in at a specific time; a nation or territory considered as an organized political community under one government. (verb) To express something definitely or clearly in speech or writing.", examples: ["The building is in a terrible state.", "He was in a state of shock.", "The state provides free education.", "Please state your name and address."], synonyms: ["(n) condition", "situation", "shape", "nation", "country", "(v) declare", "express", "say", "affirm"], level: "a2" },
-            { word: "Onto", pronunciation: "/ˈɒntuː/, /ˈɑːntuː/", type: "preposition", definition: "Moving to a position on the surface of something; moving to be attached to or connected with something; becoming aware of.", examples: ["He climbed onto the roof.", "The discussion moved onto a different topic.", "The police are onto him."], synonyms: ["upon", "on top of", "aware of"], level: "a2" },
-            { word: "Horn", pronunciation: "/hɔːrn/", type: "noun", definition: "A hard, pointed, often curved part that grows on the head of some animals (like cattle, sheep, goats); a device sounding a warning or signal.", examples: ["The bull lowered its horns.", "The driver blew the car horn."], synonyms: ["antler (similar)", "siren", "hooter", "klaxon"], level: "a2" },
-            { word: "Hour", pronunciation: "/ˈaʊər/", type: "noun", definition: "A period of 60 minutes.", examples: ["The meeting lasted for an hour.", "I'll be back in about half an hour."], synonyms: ["sixty minutes"], level: "a1" },
-            { word: "Adult", pronunciation: "/ˈædʌlt/, /əˈdʌlt/", type: "noun, adjective", definition: "(noun) A person who is fully grown or developed. (adj) Fully grown or developed.", examples: ["Children must be accompanied by an adult.", "This movie is for adult audiences only."], synonyms: ["grown-up", "mature person"], level: "a1" },
-            { word: "Acquire", pronunciation: "/əˈkwaɪər/", type: "verb", definition: "To buy or obtain (an asset or object) for oneself; to learn or develop (a skill, habit, or quality).", examples: ["The company acquired a new office building.", "She acquired the skill of programming through online courses."], synonyms: ["obtain", "get", "gain", "earn", "achieve", "learn", "master"], level: "b2" },
-            { word: "Healing", pronunciation: "/ˈhiːlɪŋ/", type: "noun, adjective", definition: "(noun) The process of making or becoming sound or healthy again. (adj) Tending to heal; therapeutic.", examples: ["The wound is healing nicely.", "Music can have a healing effect.", "The healing process takes time."], synonyms: ["recovery", "recuperation", "mending", "therapeutic", "restorative"], level: "b2" },
-            { word: "Flee", pronunciation: "/fliː/", type: "verb", definition: "To run away from a place or situation of danger.", examples: ["Thousands of refugees fled across the border.", "He was forced to flee the country."], synonyms: ["run away", "escape", "bolt", "abscond", "take flight"], level: "b2" },
-            { word: "Humanity", pronunciation: "/hjuːˈmænəti/", type: "noun", definition: "Human beings collectively; the quality of being human, especially the quality of benevolence.", examples: ["Crimes against humanity.", "We must never forget our common humanity.", "She was treated with great humanity."], synonyms: ["humankind", "mankind", "people", "humaneness", "compassion", "kindness"], level: "b2" },
-            { word: "Picture", pronunciation: "/ˈpɪktʃər/", type: "noun, verb", definition: "(noun) A painting, drawing, or photograph; an image on a screen. (verb) To form a mental image of; imagine.", examples: ["Can I take a picture of you?", "The picture quality is excellent.", "Picture yourself lying on a beach."], synonyms: ["(n) image", "photo", "painting", "drawing", "illustration", "(v) imagine", "visualize", "envisage"], level: "a1" },
-            { word: "Lawyers", pronunciation: "/ˈlɔɪərz/", type: "noun (plural)", definition: "People whose job is to give advice to people about the law and speak for them in court.", examples: ["You should consult a lawyer.", "The lawyers for the defense presented their case."], synonyms: ["attorneys", "solicitors", "barristers", "counsel"], level: "b1" },
-            { word: "Refugees", pronunciation: "/ˌrɛfjuˈdʒiːz/", type: "noun (plural)", definition: "People who have been forced to leave their country in order to escape war, persecution, or natural disaster.", examples: ["Thousands of refugees crossed the border to safety.", "The camp provides shelter for refugees."], synonyms: ["displaced persons", "asylum seekers", "exiles"], level: "b2" },
-            { word: "Young", pronunciation: "/jʌŋ/", type: "adjective", definition: "Having lived or existed for only a short time; not old.", examples: ["She has two young children.", "He's too young to vote."], synonyms: ["youthful", "juvenile", "immature", "new"], level: "a1" },
-            { word: "Room", pronunciation: "/ruːm/, /rʊm/", type: "noun", definition: "Space that can be occupied or where something can be done; a part or division of a building enclosed by walls, floor, and ceiling.", examples: ["Is there enough room for my suitcase?", "This house has five rooms."], synonyms: ["space", "area", "chamber", "office", "bedroom"], level: "a1" },
-            { word: "Called", pronunciation: "/kɔːld/", type: "verb (past tense/participle)", definition: "Past tense and past participle of 'call'; named or designated.", examples: ["He called me yesterday.", "A man called John came to see you.", "What's this thing called?"], synonyms: ["named", "designated", "phoned", "telephoned"], level: "a1" },
-            { word: "Some", pronunciation: "/sʌm/", type: "determiner, pronoun, adverb", definition: "An unspecified amount or number of; referring to a person or thing without naming them specifically.", examples: ["I need some new shoes.", "Some people find it difficult.", "Would you like some cake?", "He lives some distance away."], synonyms: ["a few", "a little", "certain", "several"], level: "a1" },
-            { word: "Flourish", pronunciation: "/ˈflʌrɪʃ/", type: "verb", definition: "To grow or develop in a healthy or vigorous way, especially as the result of a particularly favorable environment.", examples: ["Wildflowers flourish on the hillsides in spring.", "His business flourished after the new marketing campaign."], synonyms: ["thrive", "prosper", "grow", "bloom", "succeed", "burgeon"], level: "b2" },
-            { word: "Pick", pronunciation: "/pɪk/", type: "verb, noun", definition: "(verb) To choose someone or something from a group; to take hold of and remove (a flower, fruit, etc.). (noun) A choice; an act of selecting.", examples: ["Pick a card, any card.", "We picked strawberries in the summer.", "It was a difficult pick."], synonyms: ["(v) choose", "select", "gather", "harvest", "(n) choice", "selection"], level: "a2" },
-            { word: "Brain", pronunciation: "/breɪn/", type: "noun", definition: "An organ of soft nervous tissue contained in the skull of vertebrates, functioning as the coordinating center of sensation and intellectual and nervous activity; intellectual capacity.", examples: ["The brain controls the body.", "She has a brilliant brain."], synonyms: ["mind", "intellect", "cerebrum", "intelligence"], level: "a2" },
-            { word: "Collaboration", pronunciation: "/kəˌlæbəˈreɪʃən/", type: "noun", definition: "The action of working with someone to produce or create something.", examples: ["The two companies are working in collaboration on the project.", "This discovery was the result of international collaboration."], synonyms: ["cooperation", "partnership", "teamwork", "alliance"], level: "b2" },
-            { word: "About", pronunciation: "/əˈbaʊt/", type: "preposition, adverb", definition: "(prep) On the subject of; concerning. (adv) Approximately; nearly.", examples: ["What are you talking about?", "It costs about $10.", "He's about to leave."], synonyms: ["(prep) regarding", "concerning", "on", "(adv) approximately", "around", "nearly"], level: "a1" },
-            { word: "Soldiers", pronunciation: "/ˈsoʊldʒərz/", type: "noun (plural)", definition: "People who serve in an army.", examples: ["The soldiers marched through the town.", "He was a brave soldier."], synonyms: ["troops", "servicemen", "fighters", "warriors"], level: "a2" },
-            { word: "With", pronunciation: "/wɪð/, /wɪθ/", type: "preposition", definition: "Accompanied by; having or possessing; indicating the instrument used.", examples: ["I went with my friend.", "A man with a beard.", "Cut it with a knife."], synonyms: ["accompanied by", "alongside", "using", "including"], level: "a1" },
-            { word: "Incurring", pronunciation: "/ɪnˈkɜːrɪŋ/", type: "verb (present participle)", definition: "Present participle of 'incur': becoming subject to (something unwelcome or unpleasant) as a result of one's own behavior or actions.", examples: ["The company is incurring heavy losses.", "You risk incurring fines if you park here."], synonyms: ["sustaining", "experiencing", "suffering", "provoking"], level: "c1" },
-            { word: "Suing", pronunciation: "/ˈsuːɪŋ/", type: "verb (present participle)", definition: "Present participle of 'sue': instituting legal proceedings against (a person or institution), typically for redress.", examples: ["She is suing her employer for unfair dismissal.", "They are suing for damages."], synonyms: ["prosecuting", "taking to court", "litigating"], level: "b2" },
-            { word: "Concussions", pronunciation: "/kənˈkʌʃənz/", type: "noun (plural)", definition: "Temporary unconsciousness or confusion caused by a blow to the head.", examples: ["Football players are at risk of concussions.", "He suffered a mild concussion after the fall."], synonyms: ["head injuries", "brain injuries"], level: "b2" },
-            { word: "Collisions", pronunciation: "/kəˈlɪʒənz/", type: "noun (plural)", definition: "Instances of one moving object or person striking violently against another.", examples: ["There have been several collisions on this stretch of road.", "A mid-air collision between two aircraft."], synonyms: ["crashes", "impacts", "smashes", "accidents"], level: "b2" },
-            { word: "Our", pronunciation: "/aʊər/", type: "determiner", definition: "Belonging to or associated with the speaker and one or more other people previously mentioned or easily identified.", examples: ["This is our house.", "We love our dog."], synonyms: ["belonging to us"], level: "a1" },
-            { word: "Hurt", pronunciation: "/hɜːrt/", type: "verb, adjective", definition: "(verb) To cause pain or injury to; to feel pain. (adj) Injured or in pain.", examples: ["Be careful not to hurt yourself.", "My leg hurts.", "Are you hurt?"], synonyms: ["(v) injure", "wound", "harm", "pain", "(adj) injured", "wounded", "aching"], level: "a2" },
-            { word: "Injuries", pronunciation: "/ˈɪndʒəriz/", type: "noun (plural)", definition: "Instances of being injured; harm or damage.", examples: ["He sustained serious injuries in the accident.", "Minor injuries like cuts and bruises."], synonyms: ["wounds", "damage", "harm", "lesions"], level: "b1" },
-            { word: "Try", pronunciation: "/traɪ/", type: "verb, noun", definition: "(verb) To make an attempt or effort to do something; to test something to see if it is suitable or effective. (noun) An attempt or effort.", examples: ["Try to be quiet.", "Have you tried this cake?", "Give it another try."], synonyms: ["(v) attempt", "endeavor", "strive", "test", "sample", "(n) attempt", "effort", "go"], level: "a1" },
-            { word: "Rules", pronunciation: "/ruːlz/", type: "noun (plural), verb", definition: "(noun) Sets of explicit or understood regulations or principles governing conduct or procedure; (verb) To exercise ultimate power or authority over (an area and its people).", examples: ["You must follow the rules.", "The referee explained the rules of the game.", "The queen ruled for 50 years."], synonyms: ["(n) regulations", "laws", "guidelines", "principles", "(v) govern", "reign", "command"], level: "a1" },
-            { word: "Interrupt", pronunciation: "/ˌɪntəˈrʌpt/", type: "verb", definition: "To stop the continuous progress of (an activity or process); to stop (someone speaking) by saying or doing something.", examples: ["Sorry to interrupt, but I have a question.", "The game was interrupted by rain."], synonyms: ["break in", "cut off", "disturb", "halt", "suspend"], level: "b1" },
-            { word: "Again", pronunciation: "/əˈɡɛn/, /əˈɡeɪn/", type: "adverb", definition: "Another time; once more; returning to a previous position or condition.", examples: ["Can you say that again?", "He failed the test again."], synonyms: ["once more", "anew", "repeatedly"], level: "a1" },
-            { word: "Fluent", pronunciation: "/ˈfluːənt/", type: "adjective", definition: "Able to express oneself easily and articulately (in a particular foreign language).", examples: ["She is fluent in French.", "He speaks fluent English."], synonyms: ["articulate", "eloquent", "smooth", "natural"], level: "b1" },
-            { word: "Aloud", pronunciation: "/əˈlaʊd/", type: "adverb", definition: "Audibly; not silently or in a whisper.", examples: ["Please read the sentence aloud.", "He laughed aloud."], synonyms: ["out loud", "audibly", "vocally"], level: "a2" },
-            { word: "Spend", pronunciation: "/spɛnd/", type: "verb", definition: "To pay out money to buy or hire goods or services; to pass (time) in a specified way or in a particular place.", examples: ["How much did you spend?", "We spent the weekend in Paris."], synonyms: ["pay out", "expend", "disburse", "pass", "occupy", "use up"], level: "a2" },
-            { word: "Little", pronunciation: "/ˈlɪtl/", type: "adjective, determiner, adverb", definition: "Small in size, amount, or degree; a small amount of.", examples: ["She gave a little smile.", "There's very little time left.", "I only slept a little."], synonyms: ["small", "tiny", "slight", "minor", "a bit"], level: "a1" },
-            { word: "Big", pronunciation: "/bɪɡ/", type: "adjective", definition: "Of considerable size, extent, or intensity.", examples: ["It's a big house.", "That was a big mistake."], synonyms: ["large", "huge", "enormous", "great", "major", "significant"], level: "a1" },
+        const wordDatabase = [ { word: "Prediction", pronunciation: "/prɪˈdɪkʃən/", type: "noun", definition: "A statement saying what will happen in the future.", examples: ["Please don't ask me to make any predictions about tomorrow's meeting.", "The prediction of snow for Christmas did not come true."], synonyms: ["forecast", "prophecy", "prognosis", "outlook", "projection"], level: "b1" }, { word: "Desert", pronunciation: "/ˈdɛzərt/ (noun), /dɪˈzɜːrt/ (verb)", type: "noun, verb", definition: "(noun) A large area of land with little water and few plants, often covered by sand. (verb) To leave someone or something without help or support.", examples: ["The Sahara is a vast desert.", "He deserted his wife and family for another woman."], synonyms: ["(n) wasteland", "arid region", "(v) abandon", "forsake", "leave", "strand"], level: "a2" }, { word: "Descend", pronunciation: "/dɪˈsɛnd/", type: "verb", definition: "To go or come down from a higher place to a lower level.", examples: ["The plane began to descend.", "She descended the stairs slowly."], synonyms: ["go down", "come down", "drop", "fall", "sink"], level: "b1" }, { word: "Popular", pronunciation: "/ˈpɒpjələr/", type: "adjective", definition: "Liked, enjoyed, or supported by many people.", examples: ["She's the most popular teacher in school.", "That song was popular with people from my father's generation."], synonyms: ["well-liked", "favored", "in demand", "fashionable", "common"], level: "a2" }, { word: "Sit", pronunciation: "/sɪt/", type: "verb", definition: "To rest your body with your bottom on a chair or the ground.", examples: ["Please sit down.", "He came and sat next to me."], synonyms: ["be seated", "take a seat", "rest"], level: "a1" }, { word: "Sofa", pronunciation: "/ˈsoʊfə/", type: "noun", definition: "A long, soft seat with a back and usually arms, on which more than one person can sit.", examples: ["We bought a new sofa for the living room.", "He was lounging on the sofa watching TV."], synonyms: ["couch", "settee", "divan"], level: "a1" }, { word: "Bed", pronunciation: "/bɛd/", type: "noun", definition: "A piece of furniture that you sleep or rest on.", examples: ["I'm tired, I'm going to bed.", "She made the bed this morning."], synonyms: ["cot", "bunk", "berth"], level: "a1" }, { word: "Recipes", pronunciation: "/ˈrɛsəpiz/", type: "noun (plural)", definition: "Sets of instructions for preparing a particular dish, including a list of the ingredients required.", examples: ["Do you have a good recipe for chocolate cake?", "I found some interesting recipes online."], synonyms: ["cooking instructions", "formulas"], level: "a2" }, { word: "Instead", pronunciation: "/ɪnˈstɛd/", type: "adverb", definition: "In the place of someone or something else.", examples: ["There's no coffee, would you like tea instead?", "If you don't want to go out, we could order pizza instead."], synonyms: ["alternatively", "rather", "in place of"], level: "a2" }, { word: "Absolutely", pronunciation: "/ˈæbsəluːtli/", type: "adverb", definition: "Used to emphasize that something is completely true; used as a strong way of saying 'yes'.", examples: ["Are you sure you're okay? Absolutely!", "It was an absolutely fantastic performance."], synonyms: ["completely", "totally", "utterly", "definitely", "certainly"], level: "b1" }, { word: "Downright", pronunciation: "/ˈdaʊnraɪt/", type: "adverb, adjective", definition: "(adv) Extremely or completely; (adj) (of something bad or unpleasant) utter; complete.", examples: ["It's downright unfair!", "She was downright rude to him.", "He's telling downright lies."], synonyms: ["utterly", "thoroughly", "totally", "complete", "absolute"], level: "c1" }, { word: "Earn", pronunciation: "/ɜːrn/", type: "verb", definition: "To receive money as payment for work that you do; to get something that you deserve.", examples: ["How much do you earn, if you don't mind me asking?", "He earned a reputation for honesty."], synonyms: ["make", "get", "receive", "gain", "deserve", "merit"], level: "a2" }, { word: "Husband", pronunciation: "/ˈhʌzbənd/", type: "noun", definition: "The man that a woman is married to.", examples: ["I've never met her husband.", "She introduced me to her husband."], synonyms: ["spouse", "partner", "hubby (informal)"], level: "a1" }, { word: "Holdings", pronunciation: "/ˈhoʊldɪŋz/", type: "noun (plural)", definition: "Stocks, property, and other financial assets owned by a person or organization.", examples: ["The company revealed its holdings in the energy sector.", "His property holdings are extensive."], synonyms: ["assets", "possessions", "investments", "property", "shares"], level: "c1" }, { word: "Salary", pronunciation: "/ˈsæləri/", type: "noun", definition: "A fixed amount of money agreed every year as pay for an employee, usually paid directly into their bank account every month.", examples: ["She's on a good salary.", "He receives an annual salary of $50,000."], synonyms: ["pay", "wages", "income", "earnings", "remuneration"], level: "b1" }, { word: "Income", pronunciation: "/ˈɪnkʌm/", type: "noun", definition: "Money received, especially on a regular basis, for work or through investments.", examples: ["What is your approximate annual income?", "Tourism is a major source of income for the area."], synonyms: ["earnings", "revenue", "pay", "salary", "profit"], level: "b1" }, { word: "Monthly", pronunciation: "/ˈmʌnθli/", type: "adjective, adverb", definition: "Done, produced, or occurring once a month.", examples: ["We have a monthly team meeting.", "The rent is paid monthly."], synonyms: ["every month", "month by month"], level: "a2" }, { word: "Annual", pronunciation: "/ˈænjuəl/", type: "adjective", definition: "Occurring once every year.", examples: ["The company holds an annual conference.", "What is your annual income?"], synonyms: ["yearly", "once a year"], level: "b1" }, { word: "Weekly", pronunciation: "/ˈwiːkli/", type: "adjective, adverb", definition: "Done, produced, or occurring once a week.", examples: ["I get a weekly allowance.", "The magazine is published weekly."], synonyms: ["every week", "week by week"], level: "a2" }, { word: "Also", pronunciation: "/ˈɔːlsoʊ/", type: "adverb", definition: "In addition; too.", examples: ["She speaks French and also a little Spanish.", "I'm cold, and I'm also hungry."], synonyms: ["too", "as well", "in addition", "besides", "furthermore"], level: "a1" }, { word: "Hit", pronunciation: "/hɪt/", type: "verb, noun", definition: "(verb) To bring one's hand or a tool or weapon into contact with (someone or something) quickly and forcefully; (noun) An instance of hitting or being hit; a successful venture, especially a song or film.", examples: ["She hit him on the head with her umbrella.", "The song was a big hit in the summer.", "The company took a hit during the recession."], synonyms: ["(v) strike", "smack", "punch", "beat", "(n) blow", "impact", "success", "smash"], level: "a2" }, { word: "Incident", pronunciation: "/ˈɪnsɪdənt/", type: "noun", definition: "An event or occurrence, especially one that is unpleasant or unusual.", examples: ["Police are investigating the incident.", "There was a small incident involving a spilled drink."], synonyms: ["event", "occurrence", "episode", "affair", "happening"], level: "b1" }, { word: "State", pronunciation: "/steɪt/", type: "noun, verb", definition: "(noun) The particular condition that someone or something is in at a specific time; a nation or territory considered as an organized political community under one government. (verb) To express something definitely or clearly in speech or writing.", examples: ["The building is in a terrible state.", "He was in a state of shock.", "The state provides free education.", "Please state your name and address."], synonyms: ["(n) condition", "situation", "shape", "nation", "country", "(v) declare", "express", "say", "affirm"], level: "a2" }, { word: "Onto", pronunciation: "/ˈɒntuː/, /ˈɑːntuː/", type: "preposition", definition: "Moving to a position on the surface of something; moving to be attached to or connected with something; becoming aware of.", examples: ["He climbed onto the roof.", "The discussion moved onto a different topic.", "The police are onto him."], synonyms: ["upon", "on top of", "aware of"], level: "a2" }, { word: "Horn", pronunciation: "/hɔːrn/", type: "noun", definition: "A hard, pointed, often curved part that grows on the head of some animals (like cattle, sheep, goats); a device sounding a warning or signal.", examples: ["The bull lowered its horns.", "The driver blew the car horn."], synonyms: ["antler (similar)", "siren", "hooter", "klaxon"], level: "a2" }, { word: "Hour", pronunciation: "/ˈaʊər/", type: "noun", definition: "A period of 60 minutes.", examples: ["The meeting lasted for an hour.", "I'll be back in about half an hour."], synonyms: ["sixty minutes"], level: "a1" }, { word: "Adult", pronunciation: "/ˈædʌlt/, /əˈdʌlt/", type: "noun, adjective", definition: "(noun) A person who is fully grown or developed. (adj) Fully grown or developed.", examples: ["Children must be accompanied by an adult.", "This movie is for adult audiences only."], synonyms: ["grown-up", "mature person"], level: "a1" }, { word: "Acquire", pronunciation: "/əˈkwaɪər/", type: "verb", definition: "To buy or obtain (an asset or object) for oneself; to learn or develop (a skill, habit, or quality).", examples: ["The company acquired a new office building.", "She acquired the skill of programming through online courses."], synonyms: ["obtain", "get", "gain", "earn", "achieve", "learn", "master"], level: "b2" }, { word: "Healing", pronunciation: "/ˈhiːlɪŋ/", type: "noun, adjective", definition: "(noun) The process of making or becoming sound or healthy again. (adj) Tending to heal; therapeutic.", examples: ["The wound is healing nicely.", "Music can have a healing effect.", "The healing process takes time."], synonyms: ["recovery", "recuperation", "mending", "therapeutic", "restorative"], level: "b2" }, { word: "Flee", pronunciation: "/fliː/", type: "verb", definition: "To run away from a place or situation of danger.", examples: ["Thousands of refugees fled across the border.", "He was forced to flee the country."], synonyms: ["run away", "escape", "bolt", "abscond", "take flight"], level: "b2" }, { word: "Humanity", pronunciation: "/hjuːˈmænəti/", type: "noun", definition: "Human beings collectively; the quality of being human, especially the quality of benevolence.", examples: ["Crimes against humanity.", "We must never forget our common humanity.", "She was treated with great humanity."], synonyms: ["humankind", "mankind", "people", "humaneness", "compassion", "kindness"], level: "b2" }, { word: "Picture", pronunciation: "/ˈpɪktʃər/", type: "noun, verb", definition: "(noun) A painting, drawing, or photograph; an image on a screen. (verb) To form a mental image of; imagine.", examples: ["Can I take a picture of you?", "The picture quality is excellent.", "Picture yourself lying on a beach."], synonyms: ["(n) image", "photo", "painting", "drawing", "illustration", "(v) imagine", "visualize", "envisage"], level: "a1" }, { word: "Lawyers", pronunciation: "/ˈlɔɪərz/", type: "noun (plural)", definition: "People whose job is to give advice to people about the law and speak for them in court.", examples: ["You should consult a lawyer.", "The lawyers for the defense presented their case."], synonyms: ["attorneys", "solicitors", "barristers", "counsel"], level: "b1" }, { word: "Refugees", pronunciation: "/ˌrɛfjuˈdʒiːz/", type: "noun (plural)", definition: "People who have been forced to leave their country in order to escape war, persecution, or natural disaster.", examples: ["Thousands of refugees crossed the border to safety.", "The camp provides shelter for refugees."], synonyms: ["displaced persons", "asylum seekers", "exiles"], level: "b2" }, { word: "Young", pronunciation: "/jʌŋ/", type: "adjective", definition: "Having lived or existed for only a short time; not old.", examples: ["She has two young children.", "He's too young to vote."], synonyms: ["youthful", "juvenile", "immature", "new"], level: "a1" }, { word: "Room", pronunciation: "/ruːm/, /rʊm/", type: "noun", definition: "Space that can be occupied or where something can be done; a part or division of a building enclosed by walls, floor, and ceiling.", examples: ["Is there enough room for my suitcase?", "This house has five rooms."], synonyms: ["space", "area", "chamber", "office", "bedroom"], level: "a1" }, { word: "Called", pronunciation: "/kɔːld/", type: "verb (past tense/participle)", definition: "Past tense and past participle of 'call'; named or designated.", examples: ["He called me yesterday.", "A man called John came to see you.", "What's this thing called?"], synonyms: ["named", "designated", "phoned", "telephoned"], level: "a1" }, { word: "Some", pronunciation: "/sʌm/", type: "determiner, pronoun, adverb", definition: "An unspecified amount or number of; referring to a person or thing without naming them specifically.", examples: ["I need some new shoes.", "Some people find it difficult.", "Would you like some cake?", "He lives some distance away."], synonyms: ["a few", "a little", "certain", "several"], level: "a1" }, { word: "Flourish", pronunciation: "/ˈflʌrɪʃ/", type: "verb", definition: "To grow or develop in a healthy or vigorous way, especially as the result of a particularly favorable environment.", examples: ["Wildflowers flourish on the hillsides in spring.", "His business flourished after the new marketing campaign."], synonyms: ["thrive", "prosper", "grow", "bloom", "succeed", "burgeon"], level: "b2" }, { word: "Pick", pronunciation: "/pɪk/", type: "verb, noun", definition: "(verb) To choose someone or something from a group; to take hold of and remove (a flower, fruit, etc.). (noun) A choice; an act of selecting.", examples: ["Pick a card, any card.", "We picked strawberries in the summer.", "It was a difficult pick."], synonyms: ["(v) choose", "select", "gather", "harvest", "(n) choice", "selection"], level: "a2" }, { word: "Brain", pronunciation: "/breɪn/", type: "noun", definition: "An organ of soft nervous tissue contained in the skull of vertebrates, functioning as the coordinating center of sensation and intellectual and nervous activity; intellectual capacity.", examples: ["The brain controls the body.", "She has a brilliant brain."], synonyms: ["mind", "intellect", "cerebrum", "intelligence"], level: "a2" }, { word: "Collaboration", pronunciation: "/kəˌlæbəˈreɪʃən/", type: "noun", definition: "The action of working with someone to produce or create something.", examples: ["The two companies are working in collaboration on the project.", "This discovery was the result of international collaboration."], synonyms: ["cooperation", "partnership", "teamwork", "alliance"], level: "b2" }, { word: "About", pronunciation: "/əˈbaʊt/", type: "preposition, adverb", definition: "(prep) On the subject of; concerning. (adv) Approximately; nearly.", examples: ["What are you talking about?", "It costs about $10.", "He's about to leave."], synonyms: ["(prep) regarding", "concerning", "on", "(adv) approximately", "around", "nearly"], level: "a1" }, { word: "Soldiers", pronunciation: "/ˈsoʊldʒərz/", type: "noun (plural)", definition: "People who serve in an army.", examples: ["The soldiers marched through the town.", "He was a brave soldier."], synonyms: ["troops", "servicemen", "fighters", "warriors"], level: "a2" }, { word: "With", pronunciation: "/wɪð/, /wɪθ/", type: "preposition", definition: "Accompanied by; having or possessing; indicating the instrument used.", examples: ["I went with my friend.", "A man with a beard.", "Cut it with a knife."], synonyms: ["accompanied by", "alongside", "using", "including"], level: "a1" }, { word: "Incurring", pronunciation: "/ɪnˈkɜːrɪŋ/", type: "verb (present participle)", definition: "Present participle of 'incur': becoming subject to (something unwelcome or unpleasant) as a result of one's own behavior or actions.", examples: ["The company is incurring heavy losses.", "You risk incurring fines if you park here."], synonyms: ["sustaining", "experiencing", "suffering", "provoking"], level: "c1" }, { word: "Suing", pronunciation: "/ˈsuːɪŋ/", type: "verb (present participle)", definition: "Present participle of 'sue': instituting legal proceedings against (a person or institution), typically for redress.", examples: ["She is suing her employer for unfair dismissal.", "They are suing for damages."], synonyms: ["prosecuting", "taking to court", "litigating"], level: "b2" }, { word: "Concussions", pronunciation: "/kənˈkʌʃənz/", type: "noun (plural)", definition: "Temporary unconsciousness or confusion caused by a blow to the head.", examples: ["Football players are at risk of concussions.", "He suffered a mild concussion after the fall."], synonyms: ["head injuries", "brain injuries"], level: "b2" }, { word: "Collisions", pronunciation: "/kəˈlɪʒənz/", type: "noun (plural)", definition: "Instances of one moving object or person striking violently against another.", examples: ["There have been several collisions on this stretch of road.", "A mid-air collision between two aircraft."], synonyms: ["crashes", "impacts", "smashes", "accidents"], level: "b2" }, { word: "Our", pronunciation: "/aʊər/", type: "determiner", definition: "Belonging to or associated with the speaker and one or more other people previously mentioned or easily identified.", examples: ["This is our house.", "We love our dog."], synonyms: ["belonging to us"], level: "a1" }, { word: "Hurt", pronunciation: "/hɜːrt/", type: "verb, adjective", definition: "(verb) To cause pain or injury to; to feel pain. (adj) Injured or in pain.", examples: ["Be careful not to hurt yourself.", "My leg hurts.", "Are you hurt?"], synonyms: ["(v) injure", "wound", "harm", "pain", "(adj) injured", "wounded", "aching"], level: "a2" }, { word: "Injuries", pronunciation: "/ˈɪndʒəriz/", type: "noun (plural)", definition: "Instances of being injured; harm or damage.", examples: ["He sustained serious injuries in the accident.", "Minor injuries like cuts and bruises."], synonyms: ["wounds", "damage", "harm", "lesions"], level: "b1" }, { word: "Try", pronunciation: "/traɪ/", type: "verb, noun", definition: "(verb) To make an attempt or effort to do something; to test something to see if it is suitable or effective. (noun) An attempt or effort.", examples: ["Try to be quiet.", "Have you tried this cake?", "Give it another try."], synonyms: ["(v) attempt", "endeavor", "strive", "test", "sample", "(n) attempt", "effort", "go"], level: "a1" }, { word: "Rules", pronunciation: "/ruːlz/", type: "noun (plural), verb", definition: "(noun) Sets of explicit or understood regulations or principles governing conduct or procedure; (verb) To exercise ultimate power or authority over (an area and its people).", examples: ["You must follow the rules.", "The referee explained the rules of the game.", "The queen ruled for 50 years."], synonyms: ["(n) regulations", "laws", "guidelines", "principles", "(v) govern", "reign", "command"], level: "a1" }, { word: "Interrupt", pronunciation: "/ˌɪntəˈrʌpt/", type: "verb", definition: "To stop the continuous progress of (an activity or process); to stop (someone speaking) by saying or doing something.", examples: ["Sorry to interrupt, but I have a question.", "The game was interrupted by rain."], synonyms: ["break in", "cut off", "disturb", "halt", "suspend"], level: "b1" }, { word: "Again", pronunciation: "/əˈɡɛn/, /əˈɡeɪn/", type: "adverb", definition: "Another time; once more; returning to a previous position or condition.", examples: ["Can you say that again?", "He failed the test again."], synonyms: ["once more", "anew", "repeatedly"], level: "a1" }, { word: "Fluent", pronunciation: "/ˈfluːənt/", type: "adjective", definition: "Able to express oneself easily and articulately (in a particular foreign language).", examples: ["She is fluent in French.", "He speaks fluent English."], synonyms: ["articulate", "eloquent", "smooth", "natural"], level: "b1" }, { word: "Aloud", pronunciation: "/əˈlaʊd/", type: "adverb", definition: "Audibly; not silently or in a whisper.", examples: ["Please read the sentence aloud.", "He laughed aloud."], synonyms: ["out loud", "audibly", "vocally"], level: "a2" }, { word: "Spend", pronunciation: "/spɛnd/", type: "verb", definition: "To pay out money to buy or hire goods or services; to pass (time) in a specified way or in a particular place.", examples: ["How much did you spend?", "We spent the weekend in Paris."], synonyms: ["pay out", "expend", "disburse", "pass", "occupy", "use up"], level: "a2" }, { word: "Little", pronunciation: "/ˈlɪtl/", type: "adjective, determiner, adverb", definition: "Small in size, amount, or degree; a small amount of.", examples: ["She gave a little smile.", "There's very little time left.", "I only slept a little."], synonyms: ["small", "tiny", "slight", "minor", "a bit"], level: "a1" }, { word: "Leap", pronunciation: "/liːp/", type: "verb, noun", definition: "(verb) Jump or spring a long way, to a great height, or with great force. (noun) A forceful jump or quick movement.", examples: [ "He leaped over the fence.", "A leap of faith.", "A leap in profits." ], synonyms: ["(v) jump", "spring", "bound", "vault", "hop", "(n) jump", "spring", "bound", "vault", "hop", "increase", "surge"], level: "b2" }, { word: "Big", pronunciation: "/bɪɡ/", type: "adjective", definition: "Of considerable size, extent, or intensity.", examples: ["It's a big house.", "That was a big mistake."], synonyms: ["large", "huge", "enormous", "great", "major", "significant"], level: "a1" },
             { word: "Better", pronunciation: "/ˈbɛtər/", type: "adjective, adverb, verb", definition: "(adj) Of a more excellent or effective type or quality; partly or fully recovered from illness or injury. (adv) More excellently or effectively. (verb) To improve on.", examples: ["This is a better solution.", "I feel much better today.", "You should wrap up better in this cold.", "He bettered his previous record."], synonyms: ["(adj) superior", "finer", "improved", "healthier", "(adv) more effectively", "(v) improve", "surpass"], level: "a1" },
             { word: "Hear", pronunciation: "/hɪər/", type: "verb", definition: "To perceive (sound) with the ear; be told or informed of.", examples: ["Can you hear the music?", "I heard you were leaving."], synonyms: ["listen", "perceive sound", "overhear", "learn", "find out"], level: "a1" },
             { word: "Worse", pronunciation: "/wɜːrs/", type: "adjective, adverb", definition: "Of poorer quality or lower standard; more ill or unhappy; more serious or severe.", examples: ["The weather is getting worse.", "My cold is worse today.", "He plays the piano worse than his sister."], synonyms: ["inferior", "poorer", "more severe", "more ill"], level: "a2" },
@@ -10403,341 +10240,190 @@
                 ],
                 synonyms: ["covering", "top", "canopy"],
                 level: "a2"
-            },
-            {
-                word: "Leap",
-                pronunciation: "/liːp/",
-                type: "verb, noun",
-                definition: "(verb) Jump or spring a long way, to a great height, or with great force. (noun) A forceful jump or quick movement.",
-                examples: [
-                    "He leaped over the fence.",
-                    "A leap of faith.",
-                    "A leap in profits."
-                ],
-                synonyms: ["(v) jump", "spring", "bound", "vault", "hop", "(n) jump", "spring", "bound", "vault", "hop", "increase", "surge"],
-                level: "b2"
-            }
- ];
+            }];
+        const listeNoireDatabase = [ { word: "Mustard", pronunciation: "/ˈmʌstərd/", type: "noun", definition: "A hot-tasting yellow or brown paste made from the crushed seeds of certain plants, typically eaten with meat or used as a cooking ingredient.", examples: [ "Would you like mustard on your hot dog?", "A jar of Dijon mustard." ], synonyms: ["condiment", "relish", "sauce"], level: "b1" }, { word: "Skies", pronunciation: "/skaɪz/", type: "noun (plural)", definition: "Plural of sky: the region of the atmosphere and outer space seen from the earth.", examples: [ "The skies were clear and blue.", "He took to the skies in his new plane." ], synonyms: ["heavens", "atmosphere", "firmament"], level: "a2" }, { word: "Eyebrows", pronunciation: "/ˈaɪbraʊz/", type: "noun (plural)", definition: "Plural of eyebrow: the strip of hair growing on the ridge above a person's eye socket.", examples: [ "She raised her eyebrows in surprise.", "He has thick, dark eyebrows." ], synonyms: ["brows"], level: "b1" }, { word: "Curious", pronunciation: "/ˈkjʊəriəs/", type: "adjective", definition: "Eager to know or learn something; strange or unusual.", examples: [ "I'm curious to know what happened.", "It was a curious turn of events." ], synonyms: ["inquisitive", "interested", "prying", "strange", "odd"], level: "b1" }, { word: "Chemistry", pronunciation: "/ˈkɛmɪstri/", type: "noun", definition: "The branch of science concerned with the substances of which matter is composed; the complex emotional or psychological interaction between two people.", examples: [ "She is studying chemistry at university.", "They have great chemistry together." ], synonyms: ["chemical science", "rapport", "attraction", "bond"], level: "b2" }, { word: "Flunked", pronunciation: "/flʌŋkt/", type: "verb (past tense/participle)", definition: "(Informal) Past tense of 'flunk': fail to reach the required standard in (an examination, test, or course of study).", examples: [ "He flunked his math test.", "If you don't study, you'll be flunked out of college." ], synonyms: ["failed", "bombed (informal)", "did poorly on"], level: "c1" }, { word: "Fabulous", pronunciation: "/ˈfæbjələs/", type: "adjective", definition: "Extraordinary, especially extraordinarily large; wonderful.", examples: [ "You look absolutely fabulous!", "We had a fabulous time on holiday." ], synonyms: ["wonderful", "marvelous", "amazing", "fantastic", "superb"], level: "b1" }, { word: "Pot", pronunciation: "/pɒt/", type: "noun", definition: "A rounded or cylindrical container, used for cooking, serving, or storing food and drink.", examples: [ "Put the vegetables in the pot.", "A pot of tea." ], synonyms: ["pan", "cauldron", "container", "vessel"], level: "a1" }, { word: "Debrief", pronunciation: "/diːˈbriːf/", type: "verb", definition: "To question (someone, typically a soldier or spy) about a completed mission or undertaking.", examples: [ "The pilot was debriefed after his flight.", "Let's debrief the team on the project's outcome." ], synonyms: ["question", "interrogate", "interview", "examine"], level: "c1" }, { word: "Curable", pronunciation: "/ˈkjʊərəbəl/", type: "adjective", definition: "Able to be cured.", examples: [ "Fortunately, the disease is curable.", "Most forms of skin cancer are curable if detected early." ], synonyms: ["treatable", "remediable", "healable"], level: "b2" }, { word: "Plead", pronunciation: "/pliːd/", type: "verb", definition: "Make an emotional appeal; beg; state formally in court whether one is guilty or not guilty of a crime.", examples: [ "She pleaded with him not to go.", "He pleaded guilty to the charges." ], synonyms: ["beg", "implore", "entreat", "appeal"], level: "b2" }, { word: "Ignorance", pronunciation: "/ˈɪɡnərəns/", type: "noun", definition: "Lack of knowledge or information.", examples: [ "His decision was based on ignorance of the facts.", "Ignorance of the law is no excuse." ], synonyms: ["unawareness", "unconsciousness", "lack of knowledge", "unfamiliarity"], level: "b2" }, { word: "Hunt", pronunciation: "/hʌnt/", type: "verb, noun", definition: "(verb) Pursue and kill (a wild animal) for sport or food. (noun) An act of hunting wild animals.", examples: [ "The tribe hunts for its food.", "The fox hunt is a controversial tradition." ], synonyms: ["(v) pursue", "chase", "stalk", "(n) chase", "pursuit"], level: "b1" }, { word: "Turf", pronunciation: "/tɜːrf/", type: "noun", definition: "Grass and the surface layer of earth held together by its roots; (informal) a person's territory or area of influence.", examples: [ "They laid new turf for the football pitch.", "This neighborhood is my turf." ], synonyms: ["grass", "sod", "lawn", "territory", "domain"], level: "c1" }, { word: "Fold", pronunciation: "/foʊld/", type: "verb, noun", definition: "(verb) Bend (something flexible and relatively flat) over on itself so that one part of it covers another. (noun) A crease or line made by folding.", examples: [ "Can you help me fold the sheets?", "He folded the letter and put it in his pocket." ], synonyms: ["(v) crease", "bend", "double over", "(n) crease", "pleat", "crease"], level: "a2" } ];
+      const readingDatabase = [
+    { 
+        id: 1, 
+        title: "Hardship in Gaza", 
+        text: "People in Gaza say the food and help they are getting are not enough. On Sunday, Israel and other countries dropped food and sent trucks into Gaza, but many families got nothing. Israel now allows 10 hours each day for aid to enter, but the UN says this is not helping enough. People are afraid to go outside because food boxes fall from the sky and can hurt people. Many live in tents with no food or water. They also say there is still bombing, so they don’t feel safe. Israel says Hamas takes the food, but Hamas says that is not true. Some children are very thin and hungry. The UN says it has food ready, but many people still have nothing to eat. Life in Gaza is very hard, and people are asking for more help.", 
+        difficultWords: [ 
+            { word: "Aid", definition: "Help or support." }, 
+            { word: "Tent", definition: "A small cloth shelter for living." },
+            { word: "Thin", definition: "Very slim, often from lack of food." } 
+        ] 
+    },
+    { 
+        id: 2, 
+        title: "Benefits of a Good Night's Sleep",
+        text: "Getting enough quality sleep is crucial for our health. While we sleep, our brain works to form new pathways for learning and memory. Without enough sleep, we can feel tired, irritable, and unable to concentrate. Experts recommend that adults get between 7 and 9 hours of sleep per night. Creating a relaxing bedtime routine, such as reading a book or taking a warm bath, can improve sleep quality. It is also important to avoid screens from phones and computers before bed, as the blue light can disrupt our natural sleep cycle. A good night's sleep can make you feel more energetic and productive the next day.", 
+        difficultWords: [ 
+            { word: "Crucial", definition: "Extremely important." },
+            { word: "Irritable", definition: "Easily annoyed or made angry." }, 
+            { word: "Disrupt", definition: "To interrupt or cause a disturbance." } 
+        ] 
+    },
+    { 
+        id: 3, 
+        title: "Some People Earn a Lot But Aren’t Rich", 
+        text: "Some Americans make a lot of money, but they do not feel rich. They are called HENRYs. This means High Earners, Not Rich Yet. Even people who make 300,000 dollars a year can have problems with money. They earn more, but they spend more too. This is called lifestyle creep. They spend more on food, rent, and fun. They also feel that they must have the same things as their friends. Many rich people live in big cities where everything is more expensive. Experts say that people should make a plan and save money. They need to know how much money they have and how much they owe. It helps them feel better about money and the future.", 
+        difficultWords: [ 
+            { word: "rich", definition: "Having a lot of money or possessions." }, 
+            { word: "earn", definition: "To get money for work that you do." }, 
+            { word: "owe", definition: "To need to pay or give something to someone because they have lent money to you." } 
+        ] 
+    }, 
+    { 
+        id: 4, 
+        title: "AI Drones Help Farmers", 
+        text: "Farmers need to deal with weeds in a more environmentally friendly way. Global warming makes weeds grow faster which means that farmers must use more chemicals. The surprising fact is that 95% of these chemicals go into the soil or they end up on plants. Spraying fields is expensive and very inefficient. Startups like Precision AI are introducing a fresh approach with AI-powered drones which reduce chemical use by up to 90%. Traditional farming uses expensive machines like ground sprayers, which cost a lot and farmers use them only a few weeks a year. Precision AI uses AI drones which scan fields, check plant types, and spray only the weeds. This saves about 95% of chemicals compared to old methods.", 
+        difficultWords: [ 
+            { word: "weed", definition: "A wild plant which grows where people do not want it." }, 
+            { word: "approach", definition: "The way of dealing with a problem or situation." }, 
+            { word: "inefficient", definition: "Not working in the best way and wasting money, time, or energy." } 
+        ] 
+    }, 
+    { 
+        id: 5, 
+        title: "How to make meetings better", 
+        text: "Many people sit in meetings which are not good. In the UK, workers go to many bad meetings. But we can make meetings better. Before the meeting, people should know the topics to talk about. They have time to think about what to say. The boss can send a plan. Some people talk a lot. Some people are quiet. It is good to help all people talk. In online meetings, we can see names. We can click to talk. In some meetings, some people are in a room and some people are online. These meetings are harder to manage. Short breaks are good. People can drink tea or walk. After the meeting, the boss can say thank you and send a message to all.", 
+        difficultWords: [ 
+            { word: "topic", definition: "a thing to talk about." }, 
+            { word: "quiet", definition: "not talking much." }, 
+            { word: "manage", definition: "to deal with a situation." } 
+        ] 
+    }, 
+    { 
+        id: 6, 
+        title: "The History of Coffee", 
+        text: "Coffee is one of the most popular drinks in the world. Its history began centuries ago in the highlands of Ethiopia. Legend says that a goat herder named Kaldi discovered coffee beans after noticing that his goats became very energetic after eating berries from a certain tree. He tried the berries himself and felt a similar effect. Today, coffee is grown in many countries around the world and is a major export for several of them. The process from bean to cup involves harvesting, processing, roasting, and brewing. Each step can significantly alter the taste of the final drink.", 
+        difficultWords: [ 
+            { word: "Legend", definition: "A traditional story, especially one that is not proven to be true." }, 
+            { word: "Energetic", definition: "Showing or involving great activity or vitality." }, 
+            { word: "Harvesting", definition: "The process of gathering a crop." }
+        ] 
+    },
+    { 
+        id: 7, 
+        title: "The world is getting warm fast",
+        text: "Global warming surpassed 1.5°C for the first time. It was more than the target which world leaders set in 2015. Experts worry about the impacts which rising temperature has on nature and food systems. World leaders signed international agreements like the Paris Agreement, but extreme weather events worldwide show us that we need to do more and do it quickly. Good things are happening, for example, the US invested a trillion dollars into new technologies, and China wants to make more renewable energy. But it is still not enough, and we need more action to deal with the negative impacts of climate change.", 
+        difficultWords: [ 
+            { word: "Surpassed", definition: "To go beyond a limit." },
+            { word: "Target", definition: "Something you want to reach or achieve." }, 
+            { word: "Renewable energy", definition: "Energy which comes from wind, the sun, water, and so on." } 
+        ] 
+    },
+    {
+        id: 8,
+        title: "Ukraine's Stance on Peace Talks",
+        text: "Ukraine’s President Volodymyr Zelensky says Ukraine won’t give land to occupiers. He says any solution without Ukraine is against peace. His words come after US President Donald Trump said he will meet Russian President Vladimir Putin in Alaska on 15 August to discuss the war. Trump spoke about possible land swaps, but Ukraine says this breaks its constitution. Putin wants to keep four occupied areas. Zelensky wants the first step to be a ceasefire. Ukrainian leaders fear that talks without them could bring bad results. They say giving something to occupiers is dangerous for the world. Some European leaders are worried the talks may help Russia stop sanctions. Ukraine says the US can help more, but it must respect Ukraine’s security and laws.",
+        difficultWords: [
+            { word: "occupier", definition: "A person or group that controls a place by force." },
+            { word: "land swap", definition: "When two sides agree to exchange pieces of land." },
+            { word: "constitution", definition: "The laws and rules of a country." },
+            { word: "ceasefire", definition: "An agreement to stop fighting for some time." }
+        ]
+    },
+    {
+        id: 9,
+        title: "Hiroshima Survivors' Stories",
+        text: "Eighty years after the bombs fell on Hiroshima and Nagasaki, survivors still speak about the danger of nuclear weapons. Over 140,000 people died in Hiroshima and 74,000 in Nagasaki. Shingo Naito was six when the bomb hit. His father was badly hurt and died four days later. His younger brother and sister also died. Now, students are helping to tell his story. They listened to him and made paintings to show what he saw. One girl said it was hard to imagine the pain, but felt it was important to share his story with others. Today, survivors are worried about war again. They talk about the fighting in Ukraine, Gaza, and bombings in Iran. They want people to learn from the past and stop using nuclear weapons.",
+        difficultWords: [
+            { word: "survivor", definition: "A person who lives after something terrible happens." },
+            { word: "nuclear", definition: "Using powerful energy from atoms." },
+            { word: "pain", definition: "When something hurts." }
+        ]
+    },
+    {
+        id: 10,
+        title: "Rats Trained for Rescue",
+        text: "Trainers from Belgian company APOPO are training rats to search for people in disaster zones. Rats are very curious and they like to explore, so people train them just like dogs. They are very small, so they can easily move through debris. Also, they have very good smell to find things. The animals wear a small backpack with special technology. A video camera and a device helps rescuers communicate with survivors. Currently people train the rats in a simulated disaster zone. When the rat finds the person in an empty room, it pulls a switch on their vest. This sends a signal to rescuers that someone is in the debris. Then, the rat returns to the rescuers, and they reward the animal.",
+        difficultWords: [
+            { word: "disaster zone", definition: "An area where a disaster happens, for example, after an earthquake or flood." },
+            { word: "debris", definition: "Broken pieces of buildings and other things." },
+            { word: "survivor", definition: "A person who lives after something very bad happens." },
+            { word: "simulated", definition: "Something that looks real but it is not real." }
+        ]
+    },
+    {
+        id: 11,
+        title: "AI Turns to Nuclear Power",
+        text: "AI is changing the world quickly, but it needs a lot of electricity. Asking ChatGPT a question uses 30 times more power than a Google search. If everyone used AI, there would not be enough electricity to go around. To solve this problem, tech companies are turning to nuclear power. Microsoft and Google are both using nuclear reactors to power their AI data centers. Google is planning to build seven nuclear reactors by 2035. This will help meet the energy demands of AI, which uses a lot of power to process large amounts of data. Experts expect AI to keep growing, so finding clean energy solutions like nuclear power is important.",
+        difficultWords: [
+            { word: "nuclear reactor", definition: "A machine which makes energy by breaking atoms." },
+            { word: "demand", definition: "When people want something." },
+            { word: "process", definition: "To go through." }
+        ]
+    },
+    {
+        id: 12,
+        title: "The Rise of Remote Work",
+        text: "Remote work, also known as working from home, has become very popular. Many companies now allow their employees to work from anywhere. This offers great flexibility, as people can save time on commuting. However, it also requires self-discipline and a good internet connection. Some people miss the social interaction of an office, while others find they are more productive at home. The future of work will likely be a hybrid model, mixing both office and remote days.",
+        difficultWords: [
+            { word: "Flexibility", definition: "The ability to be easily changed or adapted." },
+            { word: "Commuting", definition: "The journey a person makes to and from work." },
+            { word: "Hybrid model", definition: "A system that combines two different elements." }
+        ]
+    }
+];
+        const motivationGifts = [ { score: 0, title: "Let's get started!", text: "Generate your first word to earn points.", image: "https://cdn-icons-png.flaticon.com/512/2995/2995111.png" }, { score: 50, title: "Great Start!", text: "You've learned 5 words! Keep it up.", image: "https://cdn-icons-png.flaticon.com/512/1041/1041880.png" }, { score: 100, title: "Word Explorer!", text: "100 points! You're on your way to mastery.", image: "https://cdn-icons-png.flaticon.com/512/3135/3135681.png" } ];
 
- const listeNoireDatabase = [
-            {
-                word: "Mustard",
-                pronunciation: "/ˈmʌstərd/",
-                type: "noun",
-                definition: "A hot-tasting yellow or brown paste made from the crushed seeds of certain plants, typically eaten with meat or used as a cooking ingredient.",
-                examples: [
-                    "Would you like mustard on your hot dog?",
-                    "A jar of Dijon mustard."
-                ],
-                synonyms: ["condiment", "relish", "sauce"],
-                level: "b1"
-            },
-            {
-                word: "Skies",
-                pronunciation: "/skaɪz/",
-                type: "noun (plural)",
-                definition: "Plural of sky: the region of the atmosphere and outer space seen from the earth.",
-                examples: [
-                    "The skies were clear and blue.",
-                    "He took to the skies in his new plane."
-                ],
-                synonyms: ["heavens", "atmosphere", "firmament"],
-                level: "a2"
-            },
-            {
-                word: "Eyebrows",
-                pronunciation: "/ˈaɪbraʊz/",
-                type: "noun (plural)",
-                definition: "Plural of eyebrow: the strip of hair growing on the ridge above a person's eye socket.",
-                examples: [
-                    "She raised her eyebrows in surprise.",
-                    "He has thick, dark eyebrows."
-                ],
-                synonyms: ["brows"],
-                level: "b1"
-            },
-            {
-                word: "Curious",
-                pronunciation: "/ˈkjʊəriəs/",
-                type: "adjective",
-                definition: "Eager to know or learn something; strange or unusual.",
-                examples: [
-                    "I'm curious to know what happened.",
-                    "It was a curious turn of events."
-                ],
-                synonyms: ["inquisitive", "interested", "prying", "strange", "odd"],
-                level: "b1"
-            },
-            {
-                word: "Chemistry",
-                pronunciation: "/ˈkɛmɪstri/",
-                type: "noun",
-                definition: "The branch of science concerned with the substances of which matter is composed; the complex emotional or psychological interaction between two people.",
-                examples: [
-                    "She is studying chemistry at university.",
-                    "They have great chemistry together."
-                ],
-                synonyms: ["chemical science", "rapport", "attraction", "bond"],
-                level: "b2"
-            },
-            {
-                word: "Flunked",
-                pronunciation: "/flʌŋkt/",
-                type: "verb (past tense/participle)",
-                definition: "(Informal) Past tense of 'flunk': fail to reach the required standard in (an examination, test, or course of study).",
-                examples: [
-                    "He flunked his math test.",
-                    "If you don't study, you'll be flunked out of college."
-                ],
-                synonyms: ["failed", "bombed (informal)", "did poorly on"],
-                level: "c1"
-            },
-            {
-                word: "Fabulous",
-                pronunciation: "/ˈfæbjələs/",
-                type: "adjective",
-                definition: "Extraordinary, especially extraordinarily large; wonderful.",
-                examples: [
-                    "You look absolutely fabulous!",
-                    "We had a fabulous time on holiday."
-                ],
-                synonyms: ["wonderful", "marvelous", "amazing", "fantastic", "superb"],
-                level: "b1"
-            },
-            {
-                word: "Pot",
-                pronunciation: "/pɒt/",
-                type: "noun",
-                definition: "A rounded or cylindrical container, used for cooking, serving, or storing food and drink.",
-                examples: [
-                    "Put the vegetables in the pot.",
-                    "A pot of tea."
-                ],
-                synonyms: ["pan", "cauldron", "container", "vessel"],
-                level: "a1"
-            },
-            {
-                word: "Debrief",
-                pronunciation: "/diːˈbriːf/",
-                type: "verb",
-                definition: "To question (someone, typically a soldier or spy) about a completed mission or undertaking.",
-                examples: [
-                    "The pilot was debriefed after his flight.",
-                    "Let's debrief the team on the project's outcome."
-                ],
-                synonyms: ["question", "interrogate", "interview", "examine"],
-                level: "c1"
-            },
-            {
-                word: "Curable",
-                pronunciation: "/ˈkjʊərəbəl/",
-                type: "adjective",
-                definition: "Able to be cured.",
-                examples: [
-                    "Fortunately, the disease is curable.",
-                    "Most forms of skin cancer are curable if detected early."
-                ],
-                synonyms: ["treatable", "remediable", "healable"],
-                level: "b2"
-            },
-            {
-                word: "Plead",
-                pronunciation: "/pliːd/",
-                type: "verb",
-                definition: "Make an emotional appeal; beg; state formally in court whether one is guilty or not guilty of a crime.",
-                examples: [
-                    "She pleaded with him not to go.",
-                    "He pleaded guilty to the charges."
-                ],
-                synonyms: ["beg", "implore", "entreat", "appeal"],
-                level: "b2"
-            },
-            {
-                word: "Ignorance",
-                pronunciation: "/ˈɪɡnərəns/",
-                type: "noun",
-                definition: "Lack of knowledge or information.",
-                examples: [
-                    "His decision was based on ignorance of the facts.",
-                    "Ignorance of the law is no excuse."
-                ],
-                synonyms: ["unawareness", "unconsciousness", "lack of knowledge", "unfamiliarity"],
-                level: "b2"
-            },
-            {
-                word: "Hunt",
-                pronunciation: "/hʌnt/",
-                type: "verb, noun",
-                definition: "(verb) Pursue and kill (a wild animal) for sport or food. (noun) An act of hunting wild animals.",
-                examples: [
-                    "The tribe hunts for its food.",
-                    "The fox hunt is a controversial tradition."
-                ],
-                synonyms: ["(v) pursue", "chase", "stalk", "(n) chase", "pursuit"],
-                level: "b1"
-            },
-            {
-                word: "Turf",
-                pronunciation: "/tɜːrf/",
-                type: "noun",
-                definition: "Grass and the surface layer of earth held together by its roots; (informal) a person's territory or area of influence.",
-                examples: [
-                    "They laid new turf for the football pitch.",
-                    "This neighborhood is my turf."
-                ],
-                synonyms: ["grass", "sod", "lawn", "territory", "domain"],
-                level: "c1"
-            },
-            {
-                word: "Fold",
-                pronunciation: "/foʊld/",
-                type: "verb, noun",
-                definition: "(verb) Bend (something flexible and relatively flat) over on itself so that one part of it covers another. (noun) A crease or line made by folding.",
-                examples: [
-                    "Can you help me fold the sheets?",
-                    "He folded the letter and put it in his pocket."
-                ],
-                synonyms: ["(v) crease", "bend", "double over", "(n) crease", "pleat", "crease"],
-                level: "a2"
-            }
-        ];
-        
-       
-
-        const readingDatabase = [
-            {
-                id: 1,
-                title: "Hardship in Gaza",
-                text: "People in Gaza say the food and help they are getting are not enough. On Sunday, Israel and other countries dropped food and sent trucks into Gaza, but many families got nothing. Israel now allows 10 hours each day for aid to enter, but the UN says this is not helping enough. People are afraid to go outside because food boxes fall from the sky and can hurt people. Many live in tents with no food or water. They also say there is still bombing, so they don’t feel safe. Israel says Hamas takes the food, but Hamas says that is not true. Some children are very thin and hungry. The UN says it has food ready, but many people still have nothing to eat. Life in Gaza is very hard, and people are asking for more help.",
-                difficultWords: [
-                    { word: "Aid", definition: "Help or support." },
-                    { word: "Tent", definition: "A small cloth shelter for living." },
-                    { word: "Thin", definition: "Very slim, often from lack of food." }
-                ]
-            },
-            {
-                id: 2,
-                title: "The Benefits of a Good Night's Sleep",
-                text: "Getting enough quality sleep is crucial for our health. While we sleep, our brain works to form new pathways for learning and memory. Without enough sleep, we can feel tired, irritable, and unable to concentrate. Experts recommend that adults get between 7 and 9 hours of sleep per night. Creating a relaxing bedtime routine, such as reading a book or taking a warm bath, can improve sleep quality. It is also important to avoid screens from phones and computers before bed, as the blue light can disrupt our natural sleep cycle. A good night's sleep can make you feel more energetic and productive the next day.",
-                difficultWords: [
-                    { word: "Crucial", definition: "Extremely important." },
-                    { word: "Irritable", definition: "Easily annoyed or made angry." },
-                    { word: "Disrupt", definition: "To interrupt or cause a disturbance." }
-                ]
-            },
-            {
-                id: 3,
-                title: "Some People Earn a Lot But Aren’t Rich",
-                text: "Some Americans make a lot of money, but they do not feel rich. They are called HENRYs. This means High Earners, Not Rich Yet. Even people who make 300,000 dollars a year can have problems with money. They earn more, but they spend more too. This is called lifestyle creep. They spend more on food, rent, and fun. They also feel that they must have the same things as their friends. Many rich people live in big cities where everything is more expensive. Experts say that people should make a plan and save money. They need to know how much money they have and how much they owe. It helps them feel better about money and the future.",
-                difficultWords: [
-                    { word: "rich", definition: "Having a lot of money or possessions." },
-                    { word: "earn", definition: "To get money for work that you do." },
-                    { word: "owe", definition: "To need to pay or give something to someone because they have lent money to you." }
-                ]
-            },
-            {
-                id: 4,
-                title: "AI Drones Help Farmers",
-                text: "Farmers need to deal with weeds in a more environmentally friendly way. Global warming makes weeds grow faster which means that farmers must use more chemicals. The surprising fact is that 95% of these chemicals go into the soil or they end up on plants. Spraying fields is expensive and very inefficient. Startups like Precision AI are introducing a fresh approach with AI-powered drones which reduce chemical use by up to 90%. Traditional farming uses expensive machines like ground sprayers, which cost a lot and farmers use them only a few weeks a year. Precision AI uses AI drones which scan fields, check plant types, and spray only the weeds. This saves about 95% of chemicals compared to old methods.",
-                difficultWords: [
-                    { word: "weed", definition: "A wild plant which grows where people do not want it." },
-                    { word: "approach", definition: "The way of dealing with a problem or situation." },
-                    { word: "inefficient", definition: "Not working in the best way and wasting money, time, or energy." }
-                ]
-            },
-            {
-                id: 5,
-                title: "How to make meetings better",
-                text: "Many people sit in meetings which are not good. In the UK, workers go to many bad meetings. But we can make meetings better. Before the meeting, people should know the topics to talk about. They have time to think about what to say. The boss can send a plan. Some people talk a lot. Some people are quiet. It is good to help all people talk. In online meetings, we can see names. We can click to talk. In some meetings, some people are in a room and some people are online. These meetings are harder to manage. Short breaks are good. People can drink tea or walk. After the meeting, the boss can say thank you and send a message to all.",
-                difficultWords: [   
-                    { word: "topic", definition: "a thing to talk about." },
-                    { word: "quiet", definition: "not talking much." },
-                    { word: "manage", definition: "to deal with a situation." }
-                ]
-            }
-            
-        ];
-        
-        const motivationGifts = [
-            { score: 0, title: "Let's get started!", text: "Generate your first word to earn points.", image: "https://cdn-icons-png.flaticon.com/512/2995/2995111.png" },
-            { score: 50, title: "Great Start!", text: "You've learned 5 words! Keep it up.", image: "https://cdn-icons-png.flaticon.com/512/1041/1041880.png" },
-            { score: 100, title: "Word Explorer!", text: "100 points! You're on your way to mastery.", image: "https://cdn-icons-png.flaticon.com/512/3135/3135681.png" }
-        ];
-
-        let currentWord = null;
-        let vocabularyProgress = {};
-        let listeNoireProgress = {};
-        let generatedWordsSet;
-        let generatedListeNoireSet;
-        let currentUtterance = null;
-        let currentHighlightSpan = null;
+        let currentWord = null, vocabularyProgress = {}, listeNoireProgress = {}, generatedWordsSet, generatedListeNoireSet, currentUtterance = null, currentHighlightSpan = null;
+        let currentPage = 1;
+        const itemsPerPage = 3; 
 
         const allDomElements = {
-            currentWord: document.getElementById('currentWord'), wordPronunciation: document.getElementById('wordPronunciation'), speakBtn: document.getElementById('speakBtn'), wordType: document.getElementById('wordType'), wordDefinition: document.getElementById('wordDefinition'), exampleSentence1: document.getElementById('exampleSentence1'), exampleSentence2: document.getElementById('exampleSentence2'), wordSynonyms: document.getElementById('wordSynonyms'), wordLevel: document.getElementById('wordLevel'),
-            quizQuestion: document.getElementById('quizQuestion'), quizOptions: document.getElementById('quizOptions'), quizFeedback: document.getElementById('quizFeedback'),
-            writingWord: document.getElementById('writingWord'), writingSentence: document.getElementById('writingSentence'), writingFeedback: document.getElementById('writingFeedback'),
-            motivationImage: document.getElementById('motivationImage'), motivationTitle: document.getElementById('motivationTitle'), motivationText: document.getElementById('motivationText'),
-            floatingIcon: document.getElementById('floatingIcon'),
-            searchInput: document.getElementById('searchInput'), searchResults: document.getElementById('searchResults'),
-            copyrightYear: document.getElementById('copyright-year'),
-            totalWordCount: document.getElementById('totalWordCount'), generatedWordCount: document.getElementById('generatedWordCount'), scoreDisplay: document.querySelector('#scoreDisplay span'), streakDisplay: document.querySelector('#streakDisplay span'),
-            totalListeNoireWordCount: document.getElementById('totalListeNoireWordCount'), generatedListeNoireWordCount: document.getElementById('generatedListeNoireWordCount'), listeNoireScoreDisplay: document.querySelector('#listeNoireScoreDisplay span'), listeNoireStreakDisplay: document.querySelector('#listeNoireStreakDisplay span'),
-            mainContent: document.getElementById('mainContent'),
-            readingView: document.getElementById('readingView'),
-            readingList: document.getElementById('readingList'),
-            readingTitle: document.getElementById('readingTitle'),
-            readingContent: document.getElementById('readingContent'),
-            readTextBtn: document.getElementById('readTextBtn'),
-            restartTextBtn: document.getElementById('restartTextBtn'),
-            difficultWords: document.getElementById('difficultWords')
+            currentWord: document.getElementById('currentWord'), wordPronunciation: document.getElementById('wordPronunciation'), speakBtn: document.getElementById('speakBtn'), wordType: document.getElementById('wordType'), wordDefinition: document.getElementById('wordDefinition'), exampleSentence1: document.getElementById('exampleSentence1'), exampleSentence2: document.getElementById('exampleSentence2'), wordSynonyms: document.getElementById('wordSynonyms'), wordLevel: document.getElementById('wordLevel'), quizQuestion: document.getElementById('quizQuestion'), quizOptions: document.getElementById('quizOptions'), quizFeedback: document.getElementById('quizFeedback'), writingWord: document.getElementById('writingWord'), writingSentence: document.getElementById('writingSentence'), writingFeedback: document.getElementById('writingFeedback'), motivationImage: document.getElementById('motivationImage'), motivationTitle: document.getElementById('motivationTitle'), motivationText: document.getElementById('motivationText'), floatingIcon: document.getElementById('floatingIcon'), searchInput: document.getElementById('searchInput'), searchResults: document.getElementById('searchResults'), copyrightYear: document.getElementById('copyright-year'), totalWordCount: document.getElementById('totalWordCount'), generatedWordCount: document.getElementById('generatedWordCount'), scoreDisplay: document.querySelector('#scoreDisplay span'), streakDisplay: document.querySelector('#streakDisplay span'), totalListeNoireWordCount: document.getElementById('totalListeNoireWordCount'), generatedListeNoireWordCount: document.getElementById('generatedListeNoireWordCount'), listeNoireScoreDisplay: document.querySelector('#listeNoireScoreDisplay span'), listeNoireStreakDisplay: document.querySelector('#listeNoireStreakDisplay span'), mainContent: document.getElementById('mainContent'), readingView: document.getElementById('readingView'), readingList: document.getElementById('readingList'), readingTitle: document.getElementById('readingTitle'), readingContent: document.getElementById('readingContent'), readTextBtn: document.getElementById('readTextBtn'), restartTextBtn: document.getElementById('restartTextBtn'), difficultWords: document.getElementById('difficultWords'), prevPageBtn: document.getElementById('prev-page-btn'), nextPageBtn: document.getElementById('next-page-btn'), pageInfo: document.getElementById('page-info')
         };
 
         function init() {
-            loadProgress('vocabulary');
-            loadProgress('listeNoire');
-            loadSettings();
-            
-            if (!('speechSynthesis' in window)) { 
-                allDomElements.speakBtn.disabled = true; 
-                allDomElements.readTextBtn.disabled = true;
-            }
-            
-            allDomElements.totalWordCount.textContent = wordDatabase.length;
-            generatedWordsSet = new Set();
-            allDomElements.generatedWordCount.textContent = 0;
-            
-            allDomElements.totalListeNoireWordCount.textContent = listeNoireDatabase.length;
-            generatedListeNoireSet = new Set();
-            allDomElements.generatedListeNoireWordCount.textContent = 0;
-
+            loadProgress('vocabulary'); loadProgress('listeNoire'); loadSettings();
+            if (!('speechSynthesis' in window)) { allDomElements.speakBtn.disabled = true; allDomElements.readTextBtn.disabled = true; }
+            allDomElements.totalWordCount.textContent = wordDatabase.length; generatedWordsSet = new Set(); allDomElements.generatedWordCount.textContent = 0;
+            allDomElements.totalListeNoireWordCount.textContent = listeNoireDatabase.length; generatedListeNoireSet = new Set(); allDomElements.generatedListeNoireWordCount.textContent = 0;
             populateReadingList();
-
-            const initialWord = wordDatabase[0] || listeNoireDatabase[0];
-            if (initialWord) {
-                displayWord(initialWord);
-                generateQuiz();
-            }
-
+            const initialWord = wordDatabase[0] || listeNoireDatabase[0]; if (initialWord) { displayWord(initialWord); generateQuiz(); }
             allDomElements.searchInput.addEventListener('input', handleSearch);
-            document.addEventListener('click', (event) => {
-                 if (!allDomElements.searchInput.contains(event.target) && !allDomElements.searchResults.contains(event.target)) {
-                     allDomElements.searchResults.style.display = 'none';
-                 }
-            });
+            document.addEventListener('click', (event) => { if (!allDomElements.searchInput.contains(event.target) && !allDomElements.searchResults.contains(event.target)) { allDomElements.searchResults.style.display = 'none'; } });
             allDomElements.copyrightYear.textContent = new Date().getFullYear();
+            allDomElements.prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; populateReadingList(); } });
+            allDomElements.nextPageBtn.addEventListener('click', () => { const totalPages = Math.ceil(readingDatabase.length / itemsPerPage); if (currentPage < totalPages) { currentPage++; populateReadingList(); } });
         }
 
         function populateReadingList() {
             allDomElements.readingList.innerHTML = '';
-            readingDatabase.forEach(reading => {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedItems = readingDatabase.slice(startIndex, endIndex);
+            paginatedItems.forEach(reading => {
                 const item = document.createElement('div');
-                item.className = 'reading-list-item';
+                item.className = 'reading-list-item animate__animated animate__fadeIn';
                 item.innerHTML = `<h5 class="mb-0">${reading.title}</h5>`;
                 item.onclick = () => displayReading(reading.id);
                 allDomElements.readingList.appendChild(item);
             });
+            updatePaginationControls();
         }
 
+        function updatePaginationControls() {
+            const totalPages = Math.ceil(readingDatabase.length / itemsPerPage);
+            const controlsContainer = allDomElements.prevPageBtn.parentElement;
+            if (totalPages <= 1) { controlsContainer.style.display = 'none'; return; }
+            controlsContainer.style.display = 'flex';
+            allDomElements.pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            allDomElements.prevPageBtn.disabled = (currentPage === 1);
+            allDomElements.nextPageBtn.disabled = (currentPage === totalPages);
+        }
+
+  function translateReadingWord(wordToTranslate) {
+            if (!wordToTranslate || wordToTranslate.trim() === '') return; // Sécurité pour ne pas ouvrir une page vide
+            const encodedWord = encodeURIComponent(wordToTranslate);
+            // On utilise la même URL que votre bouton "Translate"
+            const url = `https://translate.yandex.com/en/?source_lang=en&target_lang=ar&text=${encodedWord}`;
+            window.open(url, '_blank');
+        }
+
+        // --- FONCTION displayReading MISE À JOUR ---
         function displayReading(readingId) {
             const reading = readingDatabase.find(r => r.id === readingId);
             if (!reading) return;
@@ -10749,44 +10435,71 @@
             allDomElements.readingView.style.display = 'block';
             allDomElements.readingTitle.textContent = reading.title;
             
-            // Crée une copie de la liste pour pouvoir la modifier
-            const wordsToHighlight = reading.difficultWords.map(dw => dw.word.toLowerCase());
-            
-            allDomElements.readingContent.innerHTML = '';
-            let charCounter = 0;
-            const words = reading.text.split(/(\s+)/);
-            words.forEach(word => {
-                const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
-                if (cleanWord.length > 0) {
-                    const span = document.createElement('span');
-                    span.textContent = word;
-                    span.dataset.charStart = charCounter;
-                    span.onclick = () => openCambridgeDictionary(cleanWord);
-                    
-                    const lowerCleanWord = cleanWord.toLowerCase();
-                    let matchIndex = -1;
+            allDomElements.readingContent.innerHTML = ''; 
 
-                    // NOUVELLE LOGIQUE DE VÉRIFICATION (SINGULIER + PLURIEL)
-                    for (let i = 0; i < wordsToHighlight.length; i++) {
-                        const difficultWord = wordsToHighlight[i];
-                        if (lowerCleanWord === difficultWord || lowerCleanWord === difficultWord + 's') {
-                            matchIndex = i;
-                            break;
-                        }
-                    }
-
-                    if (matchIndex > -1) {
-                        span.classList.add('difficult-word');
-                        wordsToHighlight.splice(matchIndex, 1); // Retirer pour ne pas le réutiliser
-                    }
-                    
-                    allDomElements.readingContent.appendChild(span);
-                } else {
-                    allDomElements.readingContent.appendChild(document.createTextNode(word));
+            const allPossibleMatches = [];
+            reading.difficultWords.forEach(dw => {
+                const escapedWord = dw.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`\\b${escapedWord}(s)?\\b`, 'gi');
+                let matchResult;
+                while ((matchResult = regex.exec(reading.text)) !== null) {
+                    allPossibleMatches.push({
+                        start: matchResult.index,
+                        end: regex.lastIndex,
+                        text: matchResult[0],
+                        originalWord: dw.word
+                    });
                 }
-                charCounter += word.length;
             });
 
+            allPossibleMatches.sort((a, b) => a.start - b.start);
+
+            const finalMatches = [];
+            const alreadyHighlighted = new Set(); 
+            allPossibleMatches.forEach(match => {
+                if (!alreadyHighlighted.has(match.originalWord)) {
+                    finalMatches.push(match);
+                    alreadyHighlighted.add(match.originalWord);
+                }
+            });
+
+            let lastIndex = 0;
+            let charCounter = 0;
+
+            const createSpansForSegment = (text, isDifficult) => {
+                const words = text.split(/(\s+)/); 
+                words.forEach(word => {
+                    if (word.trim().length > 0) {
+                        const span = document.createElement('span');
+                        span.textContent = word;
+                        span.dataset.charStart = charCounter;
+
+                        // --- MODIFIÉ : Le 'onclick' appelle maintenant la nouvelle fonction de traduction ---
+                        span.onclick = () => translateReadingWord(word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim());
+                        
+                        if (isDifficult) {
+                            span.classList.add('difficult-word');
+                        }
+                        allDomElements.readingContent.appendChild(span);
+                    } else {
+                        allDomElements.readingContent.appendChild(document.createTextNode(word));
+                    }
+                    charCounter += word.length;
+                });
+            };
+
+            finalMatches.forEach(match => {
+                if (match.start > lastIndex) {
+                    createSpansForSegment(reading.text.substring(lastIndex, match.start), false);
+                }
+                createSpansForSegment(match.text, true);
+                lastIndex = match.end;
+            });
+
+            if (lastIndex < reading.text.length) {
+                createSpansForSegment(reading.text.substring(lastIndex), false);
+            }
+            
             let difficultWordsHtml = '<ul>';
             reading.difficultWords.forEach(dw => {
                 difficultWordsHtml += `<li><strong>${dw.word}:</strong> ${dw.definition}</li>`;
@@ -10797,13 +10510,10 @@
             currentUtterance = new SpeechSynthesisUtterance(reading.text);
             currentUtterance.lang = 'en-US';
             currentUtterance.rate = 0.9;
-
             currentUtterance.onboundary = (event) => {
                 if (event.name !== 'word') return;
-                
                 const allSpans = Array.from(allDomElements.readingContent.querySelectorAll('span[data-char-start]'));
                 let targetSpan = null;
-
                 for (let i = allSpans.length - 1; i >= 0; i--) {
                     const span = allSpans[i];
                     if (event.charIndex >= parseInt(span.dataset.charStart)) {
@@ -10811,7 +10521,6 @@
                         break;
                     }
                 }
-
                 if (currentHighlightSpan) {
                     currentHighlightSpan.classList.remove('speaking-highlight');
                 }
@@ -10820,7 +10529,6 @@
                     currentHighlightSpan = targetSpan;
                 }
             };
-
             currentUtterance.onend = () => {
                 if (currentHighlightSpan) {
                     currentHighlightSpan.classList.remove('speaking-highlight');
@@ -10828,306 +10536,33 @@
                 }
                 updateReadAloudButton('idle');
             };
-            
             currentUtterance.onpause = () => updateReadAloudButton('paused');
             currentUtterance.onresume = () => updateReadAloudButton('playing');
-
             allDomElements.readTextBtn.onclick = manageSpeechPlayback;
             allDomElements.restartTextBtn.onclick = restartSpeech;
         }
-
-        function manageSpeechPlayback() {
-            if (!currentUtterance) return;
-
-            if (speechSynthesis.paused) {
-                speechSynthesis.resume();
-            } else if (speechSynthesis.speaking) {
-                speechSynthesis.pause();
-            } else {
-                speechSynthesis.speak(currentUtterance);
-                updateReadAloudButton('playing');
-            }
-        }
-
-        function restartSpeech() {
-            speechSynthesis.cancel();
-            setTimeout(() => {
-                speechSynthesis.speak(currentUtterance);
-                updateReadAloudButton('playing');
-            }, 100);
-        }
-
-        function updateReadAloudButton(state) {
-            const btn = allDomElements.readTextBtn;
-            const restartBtn = allDomElements.restartTextBtn;
-            btn.classList.remove('btn-reading', 'btn-pause', 'btn-success');
-
-            if (state === 'playing') {
-                btn.innerHTML = `<i class="fas fa-pause-circle me-2"></i>Pause Reading`;
-                btn.classList.add('btn-pause');
-                restartBtn.style.display = 'inline-block';
-            } else if (state === 'paused') {
-                btn.innerHTML = `<i class="fas fa-play-circle me-2"></i>Resume Reading`;
-                btn.classList.add('btn-success');
-                restartBtn.style.display = 'inline-block';
-            } else { // 'idle'
-                btn.innerHTML = `<i class="fas fa-volume-up me-2"></i>Read Text Aloud`;
-                btn.classList.add('btn-reading');
-                restartBtn.style.display = 'none';
-            }
-        }
-
-        function goBackToMainView() {
-            allDomElements.readingView.style.display = 'none';
-            allDomElements.mainContent.style.display = 'block';
-            window.speechSynthesis.cancel();
-        }
-
-        function loadProgress(source) {
-            const key = source === 'vocabulary' ? 'vocabularyUserProgress' : 'listeNoireUserProgress';
-            const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress;
-            const savedProgress = localStorage.getItem(key);
-            const loadedData = savedProgress ? JSON.parse(savedProgress) : { total_score: 0, current_streak: 0, last_played: null };
-            Object.assign(progressObject, loadedData);
-            updateUI(source);
-        }
-
-        function saveProgress(source) {
-            const key = source === 'vocabulary' ? 'vocabularyUserProgress' : 'listeNoireUserProgress';
-            const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress;
-            localStorage.setItem(key, JSON.stringify(progressObject));
-        }
-
-        function updateUI(source) {
-            const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress;
-            const scoreEl = source === 'vocabulary' ? allDomElements.scoreDisplay : allDomElements.listeNoireScoreDisplay;
-            const streakEl = source === 'vocabulary' ? allDomElements.streakDisplay : allDomElements.listeNoireStreakDisplay;
-
-            scoreEl.textContent = progressObject.total_score;
-            streakEl.textContent = `${progressObject.current_streak} day${progressObject.current_streak !== 1 ? 's' : ''}`;
-            
-            const motivationProgress = vocabularyProgress;
-            const currentGift = motivationGifts.filter(g => motivationProgress.total_score >= g.score).pop() || motivationGifts[0];
-            allDomElements.motivationImage.src = currentGift.image;
-            allDomElements.motivationTitle.textContent = currentGift.title;
-            allDomElements.motivationText.textContent = currentGift.text;
-        }
-
-        function generateWord(source) {
-            goBackToMainView();
-            if (!source) {
-                const activeTab = document.querySelector('#generatorTabs .nav-link.active');
-                source = activeTab.id === 'vocabulary-tab' ? 'vocabulary' : 'listeNoire';
-            }
-
-            const sourceDB = source === 'vocabulary' ? wordDatabase : listeNoireDatabase;
-            if (sourceDB.length === 0) {
-                alert(`The "${source}" database is empty!`);
-                return;
-            }
-
-            const randomIndex = Math.floor(Math.random() * sourceDB.length);
-            const newWord = sourceDB[randomIndex];
-            displayWord(newWord);
-            generateQuiz();
-
-            const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress;
-            
-            if (source === 'vocabulary') {
-                generatedWordsSet.add(newWord.word);
-                allDomElements.generatedWordCount.textContent = generatedWordsSet.size;
-            } else {
-                generatedListeNoireSet.add(newWord.word);
-                allDomElements.generatedListeNoireWordCount.textContent = generatedListeNoireSet.size;
-            }
-
-            progressObject.total_score += 10;
-            const today = new Date().toISOString().slice(0, 10);
-            if (progressObject.last_played !== today) {
-                const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-                progressObject.current_streak = (progressObject.last_played === yesterday) ? progressObject.current_streak + 1 : 1;
-                progressObject.last_played = today;
-            }
-            updateUI(source);
-            saveProgress(source);
-        }
-
-        function displayWord(word) {
-            if (!word) return;
-            currentWord = word;
-            allDomElements.currentWord.textContent = word.word;
-            allDomElements.wordPronunciation.textContent = word.pronunciation || "";
-            allDomElements.wordType.textContent = word.type || "";
-            allDomElements.wordDefinition.textContent = word.definition || "No definition available.";
-            
-            const level = word.level || 'unknown';
-            allDomElements.wordLevel.textContent = getLevelText(level);
-            allDomElements.wordLevel.className = 'badge badge-level ' + getLevelClass(level);
-
-            allDomElements.exampleSentence1.innerHTML = '';
-            allDomElements.exampleSentence2.innerHTML = '';
-            if (word.examples && word.examples.length > 0) {
-                allDomElements.exampleSentence1.innerHTML = `• ${word.examples[0]}`;
-                if (word.examples.length > 1) {
-                    allDomElements.exampleSentence2.innerHTML = `• ${word.examples[1]}`;
-                }
-            }
-            
-            const synonymsContainer = allDomElements.wordSynonyms.parentElement;
-            if (word.synonyms && word.synonyms.length > 0) {
-                allDomElements.wordSynonyms.innerHTML = word.synonyms.map(syn => `<span class="synonym-badge">${syn}</span>`).join('');
-                synonymsContainer.style.display = 'block';
-            } else {
-                allDomElements.wordSynonyms.innerHTML = '';
-                synonymsContainer.style.display = 'none';
-            }
-
-            allDomElements.writingWord.textContent = word.word;
-            allDomElements.writingSentence.value = '';
-            allDomElements.writingFeedback.innerHTML = '';
-        }
-
-        function speakWord() {
-            if (!currentWord || !('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(currentWord.word);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function getLevelText(level) {
-            const levels = { a1: 'A1 Beginner', a2: 'A2 Elementary', b1: 'B1 Intermediate', b2: 'B2 Upper Int.', c1: 'C1 Advanced', c2: 'C2 Proficient' };
-            return levels[level?.toLowerCase()] || 'Unknown Level';
-        }
-
-        function getLevelClass(level) {
-            const validLevels = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
-            return validLevels.includes(level?.toLowerCase()) ? 'badge-' + level.toLowerCase() : 'badge-unknown';
-        }
-
-        function openCambridgeDictionary(word) {
-            if (!word) return;
-            const encodedWord = encodeURIComponent(word);
-            const url = `https://dictionary.cambridge.org/dictionary/english-arabic/${encodedWord}?q=${encodedWord}`;
-            window.open(url, '_blank');
-        }
-
-        function searchDictionary() { 
-            if (currentWord) openCambridgeDictionary(currentWord.word);
-        }
-
+        function manageSpeechPlayback() { if (!currentUtterance) return; if (speechSynthesis.paused) { speechSynthesis.resume(); } else if (speechSynthesis.speaking) { speechSynthesis.pause(); } else { speechSynthesis.speak(currentUtterance); updateReadAloudButton('playing'); } }
+        function restartSpeech() { speechSynthesis.cancel(); setTimeout(() => { speechSynthesis.speak(currentUtterance); updateReadAloudButton('playing'); }, 100); }
+        function updateReadAloudButton(state) { const btn = allDomElements.readTextBtn; const restartBtn = allDomElements.restartTextBtn; btn.classList.remove('btn-reading', 'btn-pause', 'btn-success'); if (state === 'playing') { btn.innerHTML = `<i class="fas fa-pause-circle me-2"></i>Pause Reading`; btn.classList.add('btn-pause'); restartBtn.style.display = 'inline-block'; } else if (state === 'paused') { btn.innerHTML = `<i class="fas fa-play-circle me-2"></i>Resume Reading`; btn.classList.add('btn-success'); restartBtn.style.display = 'inline-block'; } else { btn.innerHTML = `<i class="fas fa-volume-up me-2"></i>Read Text Aloud`; btn.classList.add('btn-reading'); restartBtn.style.display = 'none'; } }
+        function goBackToMainView() { allDomElements.readingView.style.display = 'none'; allDomElements.mainContent.style.display = 'block'; window.speechSynthesis.cancel(); }
+        function loadProgress(source) { const key = source === 'vocabulary' ? 'vocabularyUserProgress' : 'listeNoireUserProgress'; const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress; const savedProgress = localStorage.getItem(key); const loadedData = savedProgress ? JSON.parse(savedProgress) : { total_score: 0, current_streak: 0, last_played: null }; Object.assign(progressObject, loadedData); updateUI(source); }
+        function saveProgress(source) { const key = source === 'vocabulary' ? 'vocabularyUserProgress' : 'listeNoireUserProgress'; const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress; localStorage.setItem(key, JSON.stringify(progressObject)); }
+        function updateUI(source) { const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress; const scoreEl = source === 'vocabulary' ? allDomElements.scoreDisplay : allDomElements.listeNoireScoreDisplay; const streakEl = source === 'vocabulary' ? allDomElements.streakDisplay : allDomElements.listeNoireStreakDisplay; scoreEl.textContent = progressObject.total_score; streakEl.textContent = `${progressObject.current_streak} day${progressObject.current_streak !== 1 ? 's' : ''}`; const motivationProgress = vocabularyProgress; const currentGift = motivationGifts.filter(g => motivationProgress.total_score >= g.score).pop() || motivationGifts[0]; allDomElements.motivationImage.src = currentGift.image; allDomElements.motivationTitle.textContent = currentGift.title; allDomElements.motivationText.textContent = currentGift.text; }
+        function generateWord(source) { goBackToMainView(); if (!source) { const activeTab = document.querySelector('#generatorTabs .nav-link.active'); source = activeTab.id === 'vocabulary-tab' ? 'vocabulary' : 'listeNoire'; } const sourceDB = source === 'vocabulary' ? wordDatabase : listeNoireDatabase; if (sourceDB.length === 0) { alert(`The "${source}" database is empty!`); return; } const randomIndex = Math.floor(Math.random() * sourceDB.length); const newWord = sourceDB[randomIndex]; displayWord(newWord); generateQuiz(); const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress; if (source === 'vocabulary') { generatedWordsSet.add(newWord.word); allDomElements.generatedWordCount.textContent = generatedWordsSet.size; } else { generatedListeNoireSet.add(newWord.word); allDomElements.generatedListeNoireWordCount.textContent = generatedListeNoireSet.size; } progressObject.total_score += 10; const today = new Date().toISOString().slice(0, 10); if (progressObject.last_played !== today) { const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10); progressObject.current_streak = (progressObject.last_played === yesterday) ? progressObject.current_streak + 1 : 1; progressObject.last_played = today; } updateUI(source); saveProgress(source); }
+        function displayWord(word) { if (!word) return; currentWord = word; allDomElements.currentWord.textContent = word.word; allDomElements.wordPronunciation.textContent = word.pronunciation || ""; allDomElements.wordType.textContent = word.type || ""; allDomElements.wordDefinition.textContent = word.definition || "No definition available."; const level = word.level || 'unknown'; allDomElements.wordLevel.textContent = getLevelText(level); allDomElements.wordLevel.className = 'badge badge-level ' + getLevelClass(level); allDomElements.exampleSentence1.innerHTML = ''; allDomElements.exampleSentence2.innerHTML = ''; if (word.examples && word.examples.length > 0) { allDomElements.exampleSentence1.innerHTML = `• ${word.examples[0]}`; if (word.examples.length > 1) { allDomElements.exampleSentence2.innerHTML = `• ${word.examples[1]}`; } } const synonymsContainer = allDomElements.wordSynonyms.parentElement; if (word.synonyms && word.synonyms.length > 0) { allDomElements.wordSynonyms.innerHTML = word.synonyms.map(syn => `<span class="synonym-badge">${syn}</span>`).join(''); synonymsContainer.style.display = 'block'; } else { allDomElements.wordSynonyms.innerHTML = ''; synonymsContainer.style.display = 'none'; } allDomElements.writingWord.textContent = word.word; allDomElements.writingSentence.value = ''; allDomElements.writingFeedback.innerHTML = ''; }
+        function speakWord() { if (!currentWord || !('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(currentWord.word); utterance.lang = 'en-US'; utterance.rate = 0.9; window.speechSynthesis.speak(utterance); }
+        function getLevelText(level) { const levels = { a1: 'A1 Beginner', a2: 'A2 Elementary', b1: 'B1 Intermediate', b2: 'B2 Upper Int.', c1: 'C1 Advanced', c2: 'C2 Proficient' }; return levels[level?.toLowerCase()] || 'Unknown Level'; }
+        function getLevelClass(level) { const validLevels = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2']; return validLevels.includes(level?.toLowerCase()) ? 'badge-' + level.toLowerCase() : 'badge-unknown'; }
+        function openCambridgeDictionary(word) { if (!word) return; const encodedWord = encodeURIComponent(word); const url = `https://dictionary.cambridge.org/dictionary/english-arabic/${encodedWord}?q=${encodedWord}`; window.open(url, '_blank'); }
+        function searchDictionary() { if (currentWord) openCambridgeDictionary(currentWord.word); }
         function translateWord() { if (currentWord) window.open(`https://translate.yandex.com/en/?source_lang=en&target_lang=ar&text=${encodeURIComponent(currentWord.word)}`, '_blank'); }
-        
-        function toggleDarkMode() {
-            const isDarkMode = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDarkMode);
-            updateDarkModeButton(isDarkMode);
-        }
-
-        function updateDarkModeButton(isDarkMode) {
-             const iconClass = isDarkMode ? 'fa-sun' : 'fa-moon';
-             allDomElements.floatingIcon.className = `fas ${iconClass}`;
-        }
-
-        function loadSettings() {
-            const darkMode = localStorage.getItem('darkMode') === 'true';
-            if (darkMode) {
-                document.body.classList.add('dark-mode');
-            }
-            updateDarkModeButton(darkMode);
-        }
-
-        function handleSearch() {
-            const searchTerm = allDomElements.searchInput.value.toLowerCase().trim();
-            allDomElements.searchResults.innerHTML = '';
-            if (!searchTerm) {
-                allDomElements.searchResults.style.display = 'none';
-                return;
-            }
-
-            const activeTab = document.querySelector('#generatorTabs .nav-link.active');
-            let searchDB;
-
-            if (activeTab && activeTab.id === 'listeNoire-tab') {
-                searchDB = listeNoireDatabase;
-            } else {
-                searchDB = wordDatabase;
-            }
-
-            const filteredResults = searchDB.filter(w => w.word.toLowerCase().startsWith(searchTerm)).slice(0, 10);
-            
-            if (filteredResults.length > 0) {
-                filteredResults.forEach(wordObj => {
-                    const item = document.createElement('div');
-                    item.className = 'search-result-item';
-                    item.textContent = wordObj.word;
-                    item.onclick = () => {
-                        goBackToMainView();
-                        displayWord(wordObj);
-                        generateQuiz();
-                        allDomElements.searchResults.style.display = 'none';
-                        allDomElements.searchInput.value = '';
-                    };
-                    allDomElements.searchResults.appendChild(item);
-                });
-                allDomElements.searchResults.style.display = 'block';
-            } else {
-                allDomElements.searchResults.innerHTML = '<div class="search-result-item text-muted">No results found in this list.</div>';
-                allDomElements.searchResults.style.display = 'block';
-            }
-        }
-
-        function generateQuiz() {
-            if (!currentWord) return;
-            const combinedDB = [...wordDatabase, ...listeNoireDatabase];
-            if (combinedDB.length < 4) {
-                allDomElements.quizQuestion.textContent = "Not enough words for a quiz.";
-                allDomElements.quizOptions.innerHTML = '';
-                return;
-            }
-            allDomElements.quizQuestion.textContent = `What does "${currentWord.word}" mean?`;
-            const correctAnswer = currentWord.definition;
-            const incorrectAnswers = combinedDB.filter(w => w.word !== currentWord.word).sort(() => 0.5 - Math.random()).slice(0, 3).map(w => w.definition);
-            const allAnswers = [correctAnswer, ...incorrectAnswers].sort(() => 0.5 - Math.random());
-            allDomElements.quizOptions.innerHTML = '';
-            allAnswers.forEach(answer => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'list-group-item list-group-item-action';
-                button.textContent = answer;
-                button.onclick = () => checkAnswer(answer === correctAnswer);
-                allDomElements.quizOptions.appendChild(button);
-            });
-            allDomElements.quizFeedback.innerHTML = '';
-        }
-
-        function checkAnswer(isCorrect) {
-            allDomElements.quizFeedback.classList.remove('text-success', 'text-danger');
-            if (isCorrect) {
-                allDomElements.quizFeedback.innerHTML = '<i class="fas fa-check-circle me-2"></i>Correct! Well done!';
-                allDomElements.quizFeedback.classList.add('text-success');
-            } else {
-                allDomElements.quizFeedback.innerHTML = `<i class="fas fa-times-circle me-2"></i>Incorrect. The correct meaning is: "${currentWord.definition}"`;
-                allDomElements.quizFeedback.classList.add('text-danger');
-            }
-            allDomElements.quizOptions.querySelectorAll('button').forEach(btn => btn.disabled = true);
-        }
-
-        function checkWriting() {
-            const userSentence = allDomElements.writingSentence.value.trim();
-            allDomElements.writingFeedback.classList.remove('text-success', 'text-warning', 'text-danger');
-            if (!userSentence) {
-                allDomElements.writingFeedback.innerHTML = `<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Please write a sentence.</span>`;
-                return;
-            }
-            const wordRegex = new RegExp(`\\b${currentWord.word}\\b`, 'i');
-            if (wordRegex.test(userSentence)) {
-                allDomElements.writingFeedback.innerHTML = `<span class="text-success"><i class="fas fa-check-circle me-2"></i>Good job! You used the word.</span>`;
-            } else {
-                allDomElements.writingFeedback.innerHTML = `<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Your sentence doesn't seem to include "${currentWord.word}".</span>`;
-            }
-        }
+        function toggleDarkMode() { const isDarkMode = document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', isDarkMode); updateDarkModeButton(isDarkMode); }
+        function updateDarkModeButton(isDarkMode) { const iconClass = isDarkMode ? 'fa-sun' : 'fa-moon'; allDomElements.floatingIcon.className = `fas ${iconClass}`; }
+        function loadSettings() { const darkMode = localStorage.getItem('darkMode') === 'true'; if (darkMode) { document.body.classList.add('dark-mode'); } updateDarkModeButton(darkMode); }
+        function handleSearch() { const searchTerm = allDomElements.searchInput.value.toLowerCase().trim(); allDomElements.searchResults.innerHTML = ''; if (!searchTerm) { allDomElements.searchResults.style.display = 'none'; return; } const activeTab = document.querySelector('#generatorTabs .nav-link.active'); let searchDB; if (activeTab && activeTab.id === 'listeNoire-tab') { searchDB = listeNoireDatabase; } else { searchDB = wordDatabase; } const filteredResults = searchDB.filter(w => w.word.toLowerCase().startsWith(searchTerm)).slice(0, 10); if (filteredResults.length > 0) { filteredResults.forEach(wordObj => { const item = document.createElement('div'); item.className = 'search-result-item'; item.textContent = wordObj.word; item.onclick = () => { goBackToMainView(); displayWord(wordObj); generateQuiz(); allDomElements.searchResults.style.display = 'none'; allDomElements.searchInput.value = ''; }; allDomElements.searchResults.appendChild(item); }); allDomElements.searchResults.style.display = 'block'; } else { allDomElements.searchResults.innerHTML = '<div class="search-result-item text-muted">No results found in this list.</div>'; allDomElements.searchResults.style.display = 'block'; } }
+        function generateQuiz() { if (!currentWord) return; const combinedDB = [...wordDatabase, ...listeNoireDatabase]; if (combinedDB.length < 4) { allDomElements.quizQuestion.textContent = "Not enough words for a quiz."; allDomElements.quizOptions.innerHTML = ''; return; } allDomElements.quizQuestion.textContent = `What does "${currentWord.word}" mean?`; const correctAnswer = currentWord.definition; const incorrectAnswers = combinedDB.filter(w => w.word !== currentWord.word).sort(() => 0.5 - Math.random()).slice(0, 3).map(w => w.definition); const allAnswers = [correctAnswer, ...incorrectAnswers].sort(() => 0.5 - Math.random()); allDomElements.quizOptions.innerHTML = ''; allAnswers.forEach(answer => { const button = document.createElement('button'); button.type = 'button'; button.className = 'list-group-item list-group-item-action'; button.textContent = answer; button.onclick = () => checkAnswer(answer === correctAnswer); allDomElements.quizOptions.appendChild(button); }); allDomElements.quizFeedback.innerHTML = ''; }
+        function checkAnswer(isCorrect) { allDomElements.quizFeedback.classList.remove('text-success', 'text-danger'); if (isCorrect) { allDomElements.quizFeedback.innerHTML = '<i class="fas fa-check-circle me-2"></i>Correct! Well done!'; allDomElements.quizFeedback.classList.add('text-success'); } else { allDomElements.quizFeedback.innerHTML = `<i class="fas fa-times-circle me-2"></i>Incorrect. The correct meaning is: "${currentWord.definition}"`; allDomElements.quizFeedback.classList.add('text-danger'); } allDomElements.quizOptions.querySelectorAll('button').forEach(btn => btn.disabled = true); }
+        function checkWriting() { const userSentence = allDomElements.writingSentence.value.trim(); allDomElements.writingFeedback.classList.remove('text-success', 'text-warning', 'text-danger'); if (!userSentence) { allDomElements.writingFeedback.innerHTML = `<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Please write a sentence.</span>`; return; } const wordRegex = new RegExp(`\\b${currentWord.word}\\b`, 'i'); if (wordRegex.test(userSentence)) { allDomElements.writingFeedback.innerHTML = `<span class="text-success"><i class="fas fa-check-circle me-2"></i>Good job! You used the word.</span>`; } else { allDomElements.writingFeedback.innerHTML = `<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Your sentence doesn't seem to include "${currentWord.word}".</span>`; } }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
