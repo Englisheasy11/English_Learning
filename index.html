@@ -149,6 +149,16 @@
         .dark-mode .review-form-container, .dark-mode .review-item { background-color: #16213e; }
         .dark-mode .review-header h5 { color: var(--accent-color); }
         .dark-mode .review-comment { color: #ced4da; }
+        /* Ajoutez ceci dans votre <style> */
+.review-form-container input:invalid,
+.review-form-container textarea:invalid {
+    border-color: #dc3545 !important;
+}
+.review-form-container .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
     </style>
 </head>
 <body>
@@ -212,24 +222,18 @@
         </div>
     </div>
 
-    <div class="floating-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode"><i id="floatingIcon" class="fas fa-moon"></i></div>
-    <section class="reviews" id="reviews">
+   
+     <section class="reviews" id="reviews">
         <div class="container">
             <h2 class="heading">User <span>Reviews</span></h2>
-
-            <!-- Formulaire pour laisser un avis -->
             <div class="card review-form-container mb-5">
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Leave Your Rating</h5>
                     <form id="review-form">
-                        <div class="form-group mb-3">
-                            <label for="reviewer-name">Your Name</label>
-                            <input type="text" id="reviewer-name" class="form-control" required>
-                        </div>
+                        <div class="form-group mb-3"><label for="reviewer-name">Your Name</label><input type="text" id="reviewer-name" class="form-control" required></div>
                         <div class="form-group mb-3 text-center">
                             <label class="d-block mb-2">Your Rating</label>
                             <div class="star-rating-input">
-                                <!-- Les étoiles sont inversées pour l'astuce CSS -->
                                 <input type="radio" id="star5" name="rating" value="5" required/><label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
                                 <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
                                 <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
@@ -237,22 +241,13 @@
                                 <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="fas fa-star"></i></label>
                             </div>
                         </div>
-                        <div class="form-group mb-4">
-                            <label for="review-comment">Your Comment</label>
-                            <textarea id="review-comment" class="form-control" rows="4" required></textarea>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Submit Review</button>
-                        </div>
+                        <div class="form-group mb-4"><label for="review-comment">Your Comment</label><textarea id="review-comment" class="form-control" rows="4" required></textarea></div>
+                        <div class="text-center"><button type="submit" class="btn btn-primary">Submit Review</button></div>
                     </form>
                 </div>
             </div>
-
-            <!-- Liste des avis existants -->
             <h4 class="text-center mb-4">What Others Are Saying</h4>
-            <div id="reviews-list">
-                <!-- Les avis seront injectés ici par JavaScript -->
-            </div>
+            <div id="reviews-list"></div>
         </div>
     </section>
     <section class="contact" id="contact">
@@ -285,6 +280,8 @@
             </div>
         </div>
     </section>
+     <div class="floating-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode"><i id="floatingIcon" class="fas fa-moon"></i></div>
+    
     <footer class="site-footer py-4 mt-5 border-top"><div class="container text-center"><p class="mb-0 text-muted small">© <span id="copyright-year"></span> Vocabulary & Reading Hub by Easy_english.<a href="https://github.com/Englisheasy11" target="_blank" rel="noopener noreferrer" class="link-secondary text-decoration-none ms-2"><i class="fab fa-github"></i> View on GitHub</a></p></div></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -10506,109 +10503,96 @@
 ];
         const motivationGifts = [ { score: 0, title: "Let's get started!", text: "Generate your first word to earn points.", image: "https://cdn-icons-png.flaticon.com/512/2995/2995111.png" }, { score: 50, title: "Great Start!", text: "You've learned 5 words! Keep it up.", image: "https://cdn-icons-png.flaticon.com/512/1041/1041880.png" }, { score: 100, title: "Word Explorer!", text: "100 points! You're on your way to mastery.", image: "https://cdn-icons-png.flaticon.com/512/3135/3135681.png" } ];
 
+                // =================================================================
+        // ====== SUPPRIMEZ VOTRE ANCIEN SCRIPT ET REMPLACEZ-LE PAR CECI ======
+        // =================================================================
+
+        // --- 1. DÉCLARATION DES VARIABLES GLOBALES ---
         let currentWord = null, vocabularyProgress = {}, listeNoireProgress = {}, generatedWordsSet, generatedListeNoireSet, currentUtterance = null, currentHighlightSpan = null;
         let currentPage = 1;
         const itemsPerPage = 3; 
+        let reviews = []; // Cette variable contiendra ce qui est affiché à l'écran
 
         const allDomElements = {
             currentWord: document.getElementById('currentWord'), wordPronunciation: document.getElementById('wordPronunciation'), speakBtn: document.getElementById('speakBtn'), wordType: document.getElementById('wordType'), wordDefinition: document.getElementById('wordDefinition'), exampleSentence1: document.getElementById('exampleSentence1'), exampleSentence2: document.getElementById('exampleSentence2'), wordSynonyms: document.getElementById('wordSynonyms'), wordLevel: document.getElementById('wordLevel'), quizQuestion: document.getElementById('quizQuestion'), quizOptions: document.getElementById('quizOptions'), quizFeedback: document.getElementById('quizFeedback'), writingWord: document.getElementById('writingWord'), writingSentence: document.getElementById('writingSentence'), writingFeedback: document.getElementById('writingFeedback'), motivationImage: document.getElementById('motivationImage'), motivationTitle: document.getElementById('motivationTitle'), motivationText: document.getElementById('motivationText'), floatingIcon: document.getElementById('floatingIcon'), searchInput: document.getElementById('searchInput'), searchResults: document.getElementById('searchResults'), copyrightYear: document.getElementById('copyright-year'), totalWordCount: document.getElementById('totalWordCount'), generatedWordCount: document.getElementById('generatedWordCount'), scoreDisplay: document.querySelector('#scoreDisplay span'), streakDisplay: document.querySelector('#streakDisplay span'), totalListeNoireWordCount: document.getElementById('totalListeNoireWordCount'), generatedListeNoireWordCount: document.getElementById('generatedListeNoireWordCount'), listeNoireScoreDisplay: document.querySelector('#listeNoireScoreDisplay span'), listeNoireStreakDisplay: document.querySelector('#listeNoireStreakDisplay span'), mainContent: document.getElementById('mainContent'), readingView: document.getElementById('readingView'), readingList: document.getElementById('readingList'), readingTitle: document.getElementById('readingTitle'), readingContent: document.getElementById('readingContent'), readTextBtn: document.getElementById('readTextBtn'), restartTextBtn: document.getElementById('restartTextBtn'), difficultWords: document.getElementById('difficultWords'), prevPageBtn: document.getElementById('prev-page-btn'), nextPageBtn: document.getElementById('next-page-btn'), 
             pageInfo: document.getElementById('page-info'),
             reviewForm: document.getElementById('review-form'),
-    reviewsList: document.getElementById('reviews-list')
+            reviewsList: document.getElementById('reviews-list')
         };
 
-        function init() {
-            loadProgress('vocabulary'); loadProgress('listeNoire'); loadSettings();
-            if (!('speechSynthesis' in window)) { allDomElements.speakBtn.disabled = true; allDomElements.readTextBtn.disabled = true; }
-            allDomElements.totalWordCount.textContent = wordDatabase.length; generatedWordsSet = new Set(); allDomElements.generatedWordCount.textContent = 0;
-            allDomElements.totalListeNoireWordCount.textContent = listeNoireDatabase.length; generatedListeNoireSet = new Set(); allDomElements.generatedListeNoireWordCount.textContent = 0;
-            populateReadingList();
-            const initialWord = wordDatabase[0] || listeNoireDatabase[0]; if (initialWord) { displayWord(initialWord); generateQuiz(); }
-            allDomElements.searchInput.addEventListener('input', handleSearch);
-            document.addEventListener('click', (event) => { if (!allDomElements.searchInput.contains(event.target) && !allDomElements.searchResults.contains(event.target)) { allDomElements.searchResults.style.display = 'none'; } });
-            allDomElements.copyrightYear.textContent = new Date().getFullYear();
-            allDomElements.prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; populateReadingList(); } });
-            allDomElements.nextPageBtn.addEventListener('click', () => { const totalPages = Math.ceil(readingDatabase.length / itemsPerPage); if (currentPage < totalPages) { currentPage++; populateReadingList(); } });
-          loadReviews(); // Charge et affiche les avis sauvegardés
-    allDomElements.reviewForm.addEventListener('submit', handleReviewSubmit); 
-        
-        }
-         let reviews = [];
- function handleReviewSubmit(event) {
-            event.preventDefault(); // Empêche le rechargement de la page
+        const defaultReviews = [
+            { name: "Sameh", rating: 5, comment: "This is an amazing tool for learning English! The reading practice section is my favorite." },
+            { name: "Emad", rating: 4, comment: "Very helpful. I wish there were more C1/C2 level words, but overall it's a great app." },
+            { name: "Hajar", rating: 5, comment: "I use it every day to build my vocabulary. The streak counter is super motivating!" },
+            { name: "Hakim Azrou", rating: 5, comment: "Absolutely fantastic! The dark mode is easy on the eyes and the content is top-notch." },
+            { name: "Khalid Mansouri", rating: 4, comment: "Good application. The quiz feature really helps to reinforce what I've learned." }
+        ];
+function handleReviewSubmit(event) {
+    event.preventDefault();
+    
+    // Récupération des champs
+    const nameInput = document.getElementById('reviewer-name');
+    const commentInput = document.getElementById('review-comment');
+    const ratingInput = document.querySelector('input[name="rating"]:checked');
 
-            const nameInput = document.getElementById('reviewer-name');
-            const commentInput = document.getElementById('review-comment');
-            const ratingInput = document.querySelector('input[name="rating"]:checked');
+    // Validation
+    if (!nameInput.value.trim()) {
+        alert('Veuillez entrer votre nom.');
+        return;
+    }
+    if (!commentInput.value.trim()) {
+        alert('Veuillez écrire un commentaire.');
+        return;
+    }
+    if (!ratingInput) {
+        alert('Veuillez sélectionner une note.');
+        return;
+    }
 
-            if (!ratingInput) {
-                alert('Please select a star rating.');
-                return;
+    // Enregistrement de l'avis
+    let userReviews = JSON.parse(localStorage.getItem('englishHubReviews')) || [];
+    const newReview = {
+        name: nameInput.value.trim(),
+        rating: parseInt(ratingInput.value, 10),
+        comment: commentInput.value.trim()
+    };
+    userReviews.unshift(newReview); // Ajout au début du tableau
+    localStorage.setItem('englishHubReviews', JSON.stringify(userReviews));
+
+    // Réaffichage immédiat sans rechargement
+    renderReviews(userReviews);
+    
+    // Réinitialisation du formulaire
+    event.target.reset();
+}
+
+function loadReviews() {
+    const userReviews = JSON.parse(localStorage.getItem('englishHubReviews')) || [];
+    const allReviews = [...defaultReviews, ...userReviews];
+    renderReviews(allReviews);
+}
+
+        function renderReviews(reviewsToDisplay) {
+            allDomElements.reviewsList.innerHTML = '';
+            if (!reviewsToDisplay || reviewsToDisplay.length === 0) { 
+                allDomElements.reviewsList.innerHTML = '<p class="text-center text-muted">No reviews yet. Be the first to leave one!</p>'; 
+                return; 
             }
-
-            const newReview = {
-                name: nameInput.value.trim() || 'Anonymous',
-                rating: parseInt(ratingInput.value, 10),
-                comment: commentInput.value.trim(),
-                date: new Date().toISOString()
-            };
-
-            reviews.unshift(newReview); // Ajoute le nouvel avis au début de la liste
-            saveReviews();
-            renderReviews(); // Affiche la liste mise à jour
-            allDomElements.reviewForm.reset(); // Vide le formulaire
-        }
-
-        /** Sauvegarde la liste des avis dans le localStorage */
-        function saveReviews() {
-            localStorage.setItem('englishHubReviews', JSON.stringify(reviews));
-        }
-
-        /** Charge les avis depuis le localStorage au démarrage */
-        function loadReviews() {
-             const savedReviews = localStorage.getItem('englishHubReviews');
-            if (savedReviews) {
-                reviews = JSON.parse(savedReviews);
-            }
-            renderReviews();
-        }
-
-        /** Affiche tous les avis à l'écran */
-        function renderReviews() {
-            allDomElements.reviewsList.innerHTML = ''; // Vide la liste actuelle
-
-            if (reviews.length === 0) {
-                allDomElements.reviewsList.innerHTML = '<p class="text-center text-muted">No reviews yet. Be the first to leave one!</p>';
-                return;
-            }
-
-            reviews.forEach(review => {
+            reviewsToDisplay.forEach(review => {
                 const reviewElement = document.createElement('div');
                 reviewElement.className = 'review-item animate__animated animate__fadeInUp';
-                
-                reviewElement.innerHTML = `
-                    <div class="review-header">
-                        <h5>${review.name}</h5>
-                        <div class="review-stars">${generateStarsHTML(review.rating)}</div>
-                    </div>
-                    <p class="review-comment">${review.comment}</p>
-                `;
+                reviewElement.innerHTML = `<div class="review-header"><h5>${review.name}</h5><div class="review-stars">${generateStarsHTML(review.rating)}</div></div><p class="review-comment">${review.comment}</p>`;
                 allDomElements.reviewsList.appendChild(reviewElement);
             });
         }
 
-        /** Génère le HTML pour les étoiles (pleines et vides) */
         function generateStarsHTML(rating) {
             let starsHTML = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    starsHTML += '<i class="fas fa-star"></i>'; // Étoile pleine
-                } else {
-                    starsHTML += '<i class="far fa-star"></i>'; // Étoile vide
-                }
-            }
+            for (let i = 1; i <= 5; i++) { starsHTML += `<i class="${i <= rating ? 'fas' : 'far'} fa-star"></i>`; }
             return starsHTML;
         }
+        
+        // Fonctions pour la Lecture (Reading)
         function populateReadingList() {
             allDomElements.readingList.innerHTML = '';
             const startIndex = (currentPage - 1) * itemsPerPage;
@@ -10623,7 +10607,6 @@
             });
             updatePaginationControls();
         }
-
         function updatePaginationControls() {
             const totalPages = Math.ceil(readingDatabase.length / itemsPerPage);
             const controlsContainer = allDomElements.prevPageBtn.parentElement;
@@ -10633,58 +10616,36 @@
             allDomElements.prevPageBtn.disabled = (currentPage === 1);
             allDomElements.nextPageBtn.disabled = (currentPage === totalPages);
         }
-
-  function translateReadingWord(wordToTranslate) {
-            if (!wordToTranslate || wordToTranslate.trim() === '') return; // Sécurité pour ne pas ouvrir une page vide
+        function translateReadingWord(wordToTranslate) {
+            if (!wordToTranslate || wordToTranslate.trim() === '') return;
             const encodedWord = encodeURIComponent(wordToTranslate);
-            // On utilise la même URL que votre bouton "Translate"
             const url = `https://translate.yandex.com/en/?source_lang=en&target_lang=ar&text=${encodedWord}`;
             window.open(url, '_blank');
         }
-
-        // --- FONCTION displayReading MISE À JOUR ---
         function displayReading(readingId) {
             const reading = readingDatabase.find(r => r.id === readingId);
             if (!reading) return;
-
             window.speechSynthesis.cancel();
             updateReadAloudButton('idle');
-
             allDomElements.mainContent.style.display = 'none';
             allDomElements.readingView.style.display = 'block';
             allDomElements.readingTitle.textContent = reading.title;
-            
             allDomElements.readingContent.innerHTML = ''; 
-
             const allPossibleMatches = [];
             reading.difficultWords.forEach(dw => {
                 const escapedWord = dw.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const regex = new RegExp(`\\b${escapedWord}(s)?\\b`, 'gi');
                 let matchResult;
                 while ((matchResult = regex.exec(reading.text)) !== null) {
-                    allPossibleMatches.push({
-                        start: matchResult.index,
-                        end: regex.lastIndex,
-                        text: matchResult[0],
-                        originalWord: dw.word
-                    });
+                    allPossibleMatches.push({ start: matchResult.index, end: regex.lastIndex, text: matchResult[0], originalWord: dw.word });
                 }
             });
-
             allPossibleMatches.sort((a, b) => a.start - b.start);
-
             const finalMatches = [];
             const alreadyHighlighted = new Set(); 
-            allPossibleMatches.forEach(match => {
-                if (!alreadyHighlighted.has(match.originalWord)) {
-                    finalMatches.push(match);
-                    alreadyHighlighted.add(match.originalWord);
-                }
-            });
-
+            allPossibleMatches.forEach(match => { if (!alreadyHighlighted.has(match.originalWord)) { finalMatches.push(match); alreadyHighlighted.add(match.originalWord); } });
             let lastIndex = 0;
             let charCounter = 0;
-
             const createSpansForSegment = (text, isDifficult) => {
                 const words = text.split(/(\s+)/); 
                 words.forEach(word => {
@@ -10692,40 +10653,22 @@
                         const span = document.createElement('span');
                         span.textContent = word;
                         span.dataset.charStart = charCounter;
-
-                        // --- MODIFIÉ : Le 'onclick' appelle maintenant la nouvelle fonction de traduction ---
                         span.onclick = () => translateReadingWord(word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim());
-                        
-                        if (isDifficult) {
-                            span.classList.add('difficult-word');
-                        }
+                        if (isDifficult) { span.classList.add('difficult-word'); }
                         allDomElements.readingContent.appendChild(span);
-                    } else {
-                        allDomElements.readingContent.appendChild(document.createTextNode(word));
-                    }
+                    } else { allDomElements.readingContent.appendChild(document.createTextNode(word)); }
                     charCounter += word.length;
                 });
             };
-
             finalMatches.forEach(match => {
-                if (match.start > lastIndex) {
-                    createSpansForSegment(reading.text.substring(lastIndex, match.start), false);
-                }
+                if (match.start > lastIndex) { createSpansForSegment(reading.text.substring(lastIndex, match.start), false); }
                 createSpansForSegment(match.text, true);
                 lastIndex = match.end;
             });
-
-            if (lastIndex < reading.text.length) {
-                createSpansForSegment(reading.text.substring(lastIndex), false);
-            }
-            
+            if (lastIndex < reading.text.length) { createSpansForSegment(reading.text.substring(lastIndex), false); }
             let difficultWordsHtml = '<ul>';
-            reading.difficultWords.forEach(dw => {
-                difficultWordsHtml += `<li><strong>${dw.word}:</strong> ${dw.definition}</li>`;
-            });
-            difficultWordsHtml += '</ul>';
-            allDomElements.difficultWords.innerHTML = difficultWordsHtml;
-
+            reading.difficultWords.forEach(dw => { difficultWordsHtml += `<li><strong>${dw.word}:</strong> ${dw.definition}</li>`; });
+            allDomElements.difficultWords.innerHTML = difficultWordsHtml + '</ul>';
             currentUtterance = new SpeechSynthesisUtterance(reading.text);
             currentUtterance.lang = 'en-US';
             currentUtterance.rate = 0.9;
@@ -10733,28 +10676,11 @@
                 if (event.name !== 'word') return;
                 const allSpans = Array.from(allDomElements.readingContent.querySelectorAll('span[data-char-start]'));
                 let targetSpan = null;
-                for (let i = allSpans.length - 1; i >= 0; i--) {
-                    const span = allSpans[i];
-                    if (event.charIndex >= parseInt(span.dataset.charStart)) {
-                        targetSpan = span;
-                        break;
-                    }
-                }
-                if (currentHighlightSpan) {
-                    currentHighlightSpan.classList.remove('speaking-highlight');
-                }
-                if (targetSpan) {
-                    targetSpan.classList.add('speaking-highlight');
-                    currentHighlightSpan = targetSpan;
-                }
+                for (let i = allSpans.length - 1; i >= 0; i--) { const span = allSpans[i]; if (event.charIndex >= parseInt(span.dataset.charStart)) { targetSpan = span; break; } }
+                if (currentHighlightSpan) { currentHighlightSpan.classList.remove('speaking-highlight'); }
+                if (targetSpan) { targetSpan.classList.add('speaking-highlight'); currentHighlightSpan = targetSpan; }
             };
-            currentUtterance.onend = () => {
-                if (currentHighlightSpan) {
-                    currentHighlightSpan.classList.remove('speaking-highlight');
-                    currentHighlightSpan = null;
-                }
-                updateReadAloudButton('idle');
-            };
+            currentUtterance.onend = () => { if (currentHighlightSpan) { currentHighlightSpan.classList.remove('speaking-highlight'); currentHighlightSpan = null; } updateReadAloudButton('idle'); };
             currentUtterance.onpause = () => updateReadAloudButton('paused');
             currentUtterance.onresume = () => updateReadAloudButton('playing');
             allDomElements.readTextBtn.onclick = manageSpeechPlayback;
@@ -10764,6 +10690,8 @@
         function restartSpeech() { speechSynthesis.cancel(); setTimeout(() => { speechSynthesis.speak(currentUtterance); updateReadAloudButton('playing'); }, 100); }
         function updateReadAloudButton(state) { const btn = allDomElements.readTextBtn; const restartBtn = allDomElements.restartTextBtn; btn.classList.remove('btn-reading', 'btn-pause', 'btn-success'); if (state === 'playing') { btn.innerHTML = `<i class="fas fa-pause-circle me-2"></i>Pause Reading`; btn.classList.add('btn-pause'); restartBtn.style.display = 'inline-block'; } else if (state === 'paused') { btn.innerHTML = `<i class="fas fa-play-circle me-2"></i>Resume Reading`; btn.classList.add('btn-success'); restartBtn.style.display = 'inline-block'; } else { btn.innerHTML = `<i class="fas fa-volume-up me-2"></i>Read Text Aloud`; btn.classList.add('btn-reading'); restartBtn.style.display = 'none'; } }
         function goBackToMainView() { allDomElements.readingView.style.display = 'none'; allDomElements.mainContent.style.display = 'block'; window.speechSynthesis.cancel(); }
+        
+        // Fonctions pour les Mots et la Logique Principale
         function loadProgress(source) { const key = source === 'vocabulary' ? 'vocabularyUserProgress' : 'listeNoireUserProgress'; const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress; const savedProgress = localStorage.getItem(key); const loadedData = savedProgress ? JSON.parse(savedProgress) : { total_score: 0, current_streak: 0, last_played: null }; Object.assign(progressObject, loadedData); updateUI(source); }
         function saveProgress(source) { const key = source === 'vocabulary' ? 'vocabularyUserProgress' : 'listeNoireUserProgress'; const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress; localStorage.setItem(key, JSON.stringify(progressObject)); }
         function updateUI(source) { const progressObject = source === 'vocabulary' ? vocabularyProgress : listeNoireProgress; const scoreEl = source === 'vocabulary' ? allDomElements.scoreDisplay : allDomElements.listeNoireScoreDisplay; const streakEl = source === 'vocabulary' ? allDomElements.streakDisplay : allDomElements.listeNoireStreakDisplay; scoreEl.textContent = progressObject.total_score; streakEl.textContent = `${progressObject.current_streak} day${progressObject.current_streak !== 1 ? 's' : ''}`; const motivationProgress = vocabularyProgress; const currentGift = motivationGifts.filter(g => motivationProgress.total_score >= g.score).pop() || motivationGifts[0]; allDomElements.motivationImage.src = currentGift.image; allDomElements.motivationTitle.textContent = currentGift.title; allDomElements.motivationText.textContent = currentGift.text; }
@@ -10783,6 +10711,44 @@
         function checkAnswer(isCorrect) { allDomElements.quizFeedback.classList.remove('text-success', 'text-danger'); if (isCorrect) { allDomElements.quizFeedback.innerHTML = '<i class="fas fa-check-circle me-2"></i>Correct! Well done!'; allDomElements.quizFeedback.classList.add('text-success'); } else { allDomElements.quizFeedback.innerHTML = `<i class="fas fa-times-circle me-2"></i>Incorrect. The correct meaning is: "${currentWord.definition}"`; allDomElements.quizFeedback.classList.add('text-danger'); } allDomElements.quizOptions.querySelectorAll('button').forEach(btn => btn.disabled = true); }
         function checkWriting() { const userSentence = allDomElements.writingSentence.value.trim(); allDomElements.writingFeedback.classList.remove('text-success', 'text-warning', 'text-danger'); if (!userSentence) { allDomElements.writingFeedback.innerHTML = `<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Please write a sentence.</span>`; return; } const wordRegex = new RegExp(`\\b${currentWord.word}\\b`, 'i'); if (wordRegex.test(userSentence)) { allDomElements.writingFeedback.innerHTML = `<span class="text-success"><i class="fas fa-check-circle me-2"></i>Good job! You used the word.</span>`; } else { allDomElements.writingFeedback.innerHTML = `<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Your sentence doesn't seem to include "${currentWord.word}".</span>`; } }
 
+        // --- 3. FONCTION D'INITIALISATION PRINCIPALE ---
+        function init() {
+            // Chargement initial
+            loadProgress('vocabulary'); 
+            loadProgress('listeNoire'); 
+            loadSettings();
+            loadReviews(); // Chargement des avis
+            
+            // Configuration des fonctionnalités
+            if (!('speechSynthesis' in window)) { allDomElements.speakBtn.disabled = true; allDomElements.readTextBtn.disabled = true; }
+            
+            allDomElements.totalWordCount.textContent = wordDatabase.length; 
+            generatedWordsSet = new Set(); 
+            allDomElements.generatedWordCount.textContent = 0;
+            
+            allDomElements.totalListeNoireWordCount.textContent = listeNoireDatabase.length; 
+            generatedListeNoireSet = new Set(); 
+            allDomElements.generatedListeNoireWordCount.textContent = 0;
+            
+            populateReadingList();
+            
+            const initialWord = wordDatabase[0] || listeNoireDatabase[0]; 
+            if (initialWord) { 
+                displayWord(initialWord); 
+                generateQuiz(); 
+            }
+            
+            allDomElements.copyrightYear.textContent = new Date().getFullYear();
+            
+            // Ajout des écouteurs d'événements
+            allDomElements.searchInput.addEventListener('input', handleSearch);
+            document.addEventListener('click', (event) => { if (!allDomElements.searchInput.contains(event.target) && !allDomElements.searchResults.contains(event.target)) { allDomElements.searchResults.style.display = 'none'; } });
+            allDomElements.prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; populateReadingList(); } });
+            allDomElements.nextPageBtn.addEventListener('click', () => { const totalPages = Math.ceil(readingDatabase.length / itemsPerPage); if (currentPage < totalPages) { currentPage++; populateReadingList(); } });
+            allDomElements.reviewForm.addEventListener('submit', handleReviewSubmit); 
+        }
+
+        // --- 4. DÉMARRAGE DE L'APPLICATION ---
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
